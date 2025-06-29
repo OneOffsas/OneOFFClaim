@@ -1,72 +1,84 @@
-body {
-  margin: 0;
-  font-family: 'Segoe UI', sans-serif;
-  background: linear-gradient(135deg, #1e1e2f, #27273d);
+.register-container {
   height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
+  background: linear-gradient(135deg, #1f1c2c, #928dab);
+  background-size: 400% 400%;
+  animation: gradientMove 12s ease infinite;
+  font-family: 'Segoe UI', sans-serif;
 }
 
-.register-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
+@keyframes gradientMove {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
-.register-card {
-  background: rgba(255, 255, 255, 0.07);
+.register-box {
+  width: 400px;
+  padding: 45px;
   border-radius: 20px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  padding: 40px;
-  width: 100%;
-  max-width: 400px;
+  backdrop-filter: blur(18px);
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.25);
   color: white;
-}
-
-.register-card h2 {
   text-align: center;
-  margin-bottom: 30px;
-  font-size: 24px;
 }
 
-form input {
-  width: 100%;
-  padding: 12px 20px;
+.register-box h2 {
   margin-bottom: 20px;
+  font-size: 26px;
+  letter-spacing: 1px;
+}
+
+.register-box form input {
+  width: 100%;
+  padding: 14px;
+  margin: 12px 0;
   border: none;
-  border-radius: 12px;
-  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.2);
   color: white;
-  font-size: 16px;
+  font-size: 14px;
+  outline: none;
 }
 
-form input::placeholder {
-  color: #ccc;
+.register-box form input::placeholder {
+  color: #e0e0e0;
 }
 
-form button {
+.register-box button {
   width: 100%;
   padding: 12px;
-  background: #7a5cff;
   border: none;
-  border-radius: 12px;
+  border-radius: 10px;
+  background-color: #7f53ac;
   color: white;
-  font-size: 18px;
+  font-weight: bold;
+  margin-top: 10px;
   cursor: pointer;
-  transition: 0.3s ease;
+  transition: 0.3s;
 }
 
-form button:hover {
-  background: #957dff;
+.register-box button:hover {
+  background-color: #5e3a99;
 }
 
-.message {
-  text-align: center;
+.register-box .message {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #ffcccb;
+}
+
+.register-box .link {
   margin-top: 15px;
-  font-size: 16px;
-  color: #fff;
+  font-size: 13px;
+  color: #d0d0d0;
+}
+
+.register-box .link a {
+  color: #ffffff;
+  text-decoration: underline;
 }
