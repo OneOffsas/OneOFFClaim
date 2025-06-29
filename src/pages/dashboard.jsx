@@ -1,62 +1,61 @@
-import React, { useEffect, useState } from "react";
-import { getTickets } from "@/lib/api";
+import { useEffect, useState } from "react";
 import { useAuth } from "@/lib/AuthContext";
 import Menu from "@/components/Menu";
 
 export default function Dashboard() {
   const { user } = useAuth();
   const [tickets, setTickets] = useState([]);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (user?.email) {
-      const fetchTickets = async () => {
-        try {
-          const data = await getTickets(user.role === "admin" ? null : user.email);
-          setTickets(data.tickets || []);
-        } catch (error) {
-          console.error("Erreur lors du chargement des tickets :", error);
-        } finally {
-          setLoading(false);
+    const fetchTickets = async () => {
+      try {
+        const response = await fetch(
+          `https://script.google.com/macros/s/AKfycbzm3MrvKRQy75IMnHosYHC1zHvIIxq-kf53ZwV9J2YatrP6C90MCO7JJHjSFxOnQdle/exec?action=listTickets&email=${user.email}`
+        );
+        const data = await response.json();
+        if (data && data.length > 0) {
+          setTickets(data);
         }
-      };
+      } catch (error) {
+        console.error("Erreur lors de la récupération des tickets :", error);
+      }
+    };
+
+    if (user?.email) {
       fetchTickets();
     }
   }, [user]);
 
   return (
-    <div className="min-h-screen bg-gray-100 text-gray-800">
+    <>
       <Menu />
-      <div className="p-6 max-w-6xl mx-auto">
-        <h1 className="text-2xl font-bold mb-4">Bienvenue {user?.nom} 👋</h1>
-        <h2 className="text-xl font-semibold mb-6">Liste des tickets</h2>
+      <div className="max-w-7xl mx-auto mt-6 px-4">
+        <h1 className="text-2xl font-bold mb-4">Mes Tickets</h1>
 
-        {loading ? (
-          <p>Chargement des tickets...</p>
-        ) : tickets.length === 0 ? (
-          <p>Aucun ticket trouvé.</p>
+        {tickets.length === 0 ? (
+          <p className="text-gray-500">Aucun ticket trouvé.</p>
         ) : (
-          <div className="overflow-auto rounded shadow bg-white">
-            <table className="min-w-full text-sm text-left">
-              <thead className="bg-blue-100">
+          <div className="overflow-x-auto">
+            <table className="min-w-full table-auto border border-gray-300">
+              <thead className="bg-gray-100">
                 <tr>
-                  <th className="px-4 py-2">ID</th>
-                  <th className="px-4 py-2">Commande</th>
-                  <th className="px-4 py-2">Transporteur</th>
-                  <th className="px-4 py-2">Problématique</th>
-                  <th className="px-4 py-2">Statut</th>
-                  <th className="px-4 py-2">Date MAJ</th>
+                  <th className="px-3 py-2 border">ID</th>
+                  <th className="px-3 py-2 border">Commande</th>
+                  <th className="px-3 py-2 border">Problème</th>
+                  <th className="px-3 py-2 border">Transporteur</th>
+                  <th className="px-3 py-2 border">Statut</th>
+                  <th className="px-3 py-2 border">MAJ</th>
                 </tr>
               </thead>
               <tbody>
-                {tickets.map((ticket) => (
-                  <tr key={ticket.ID_Ticket} className="border-t">
-                    <td className="px-4 py-2">{ticket.ID_Ticket}</td>
-                    <td className="px-4 py-2">{ticket.Nomero_Commande}</td>
-                    <td className="px-4 py-2">{ticket.Transporteur}</td>
-                    <td className="px-4 py-2">{ticket.Problematique}</td>
-                    <td className="px-4 py-2">{ticket.Statut}</td>
-                    <td className="px-4 py-2">{ticket.Date_MAJ}</td>
+                {tickets.map((ticket, index) => (
+                  <tr key={index} className="hover:bg-gray-50">
+                    <td className="px-3 py-2 border">{ticket.ID_Ticket}</td>
+                    <td className="px-3 py-2 border">{ticket.Nomero_Commande}</td>
+                    <td className="px-3 py-2 border">{ticket.Problematique}</td>
+                    <td className="px-3 py-2 border">{ticket.Transporteur}</td>
+                    <td className="px-3 py-2 border">{ticket.Statut}</td>
+                    <td className="px-3 py-2 border">{ticket.Date_MAJ}</td>
                   </tr>
                 ))}
               </tbody>
@@ -64,7 +63,7 @@ export default function Dashboard() {
           </div>
         )}
       </div>
-    </div>
+    </>
   );
 }
 
