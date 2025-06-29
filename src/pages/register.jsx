@@ -2,69 +2,70 @@ import React, { useState } from "react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import "./register.css";
 
 const Register = () => {
   const [formData, setFormData] = useState({
     societe: "",
-    prenom: "",
     nom: "",
+    prenom: "",
     email: "",
     password: "",
   });
   const [message, setMessage] = useState("");
-  const navigate = useNavigate();
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-    setMessage("");
+    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      // Étape 1 : Crée l'utilisateur dans Firebase
-      await createUserWithEmailAndPassword(auth, formData.email, formData.password);
+    setMessage("");
 
-      // Étape 2 : Enregistre aussi dans Google Sheets via Apps Script
+    try {
+      const { user } = await createUserWithEmailAndPassword(
+        auth,
+        formData.email,
+        formData.password
+      );
+
       await axios.post("https://script.google.com/macros/s/AKfycbzm3MrvKRQy75IMnHosYHC1zHvIIxq-kf53ZwV9J2YatrP6C90MCO7JJHjSFxOnQdle/exec", {
-        Societe: formData.societe,
-        Prenom: formData.prenom,
-        Nom: formData.nom,
-        Email: formData.email,
-        Role: "client",
-        Actif: "oui",
-        Date_Inscription: new Date().toISOString(),
-        Derniere_Connexion: "",
+        ...formData,
+        id: user.uid,
+        role: "client",
+        actif: "oui",
+        dateInscription: new Date().toLocaleDateString("fr-FR"),
       });
 
       setMessage("✅ Inscription réussie !");
-      setTimeout(() => navigate("/login"), 2000);
+      setFormData({
+        societe: "",
+        nom: "",
+        prenom: "",
+        email: "",
+        password: "",
+      });
     } catch (error) {
-      if (error.message.includes("email-already-in-use")) {
-        setMessage("❌ Cette adresse email est déjà utilisée.");
-      } else if (error.message.includes("Network Error")) {
-        setMessage("❌ Erreur réseau. Vérifie ta connexion.");
+      if (error.code === "auth/email-already-in-use") {
+        setMessage("❌ Email déjà utilisé.");
       } else {
-        setMessage(`❌ Erreur : ${error.message}`);
+        setMessage("❌ Erreur réseau. Vérifie ta connexion.");
       }
     }
   };
 
   return (
-    <div className="register-page">
-      <div className="glass-card">
+    <div className="register-container">
+      <form className="register-form" onSubmit={handleSubmit}>
         <h2>Créer un compte</h2>
-        <form onSubmit={handleSubmit}>
-          <input type="text" name="societe" placeholder="Société" onChange={handleChange} required />
-          <input type="text" name="prenom" placeholder="Prénom" onChange={handleChange} required />
-          <input type="text" name="nom" placeholder="Nom" onChange={handleChange} required />
-          <input type="email" name="email" placeholder="Email" onChange={handleChange} required />
-          <input type="password" name="password" placeholder="Mot de passe" onChange={handleChange} required />
-          <button type="submit">S'inscrire</button>
-        </form>
-        {message && <p className="message">{message}</p>}
-      </div>
+        <input type="text" name="societe" placeholder="Société" required onChange={handleChange} value={formData.societe} />
+        <input type="text" name="nom" placeholder="Nom" required onChange={handleChange} value={formData.nom} />
+        <input type="text" name="prenom" placeholder="Prénom" required onChange={handleChange} value={formData.prenom} />
+        <input type="email" name="email" placeholder="Email" required onChange={handleChange} value={formData.email} />
+        <input type="password" name="password" placeholder="Mot de passe" required onChange={handleChange} value={formData.password} />
+        <button type="submit">S'inscrire</button>
+        {message && <p className="register-message">{message}</p>}
+      </form>
     </div>
   );
 };
