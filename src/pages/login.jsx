@@ -1,60 +1,57 @@
-import React, { useState } from 'react';
-import { signInWithEmailAndPassword } from 'firebase/auth';
-import { useNavigate } from 'react-router-dom';
-import { auth } from '../firebase';
-import './login.css';
+// src/pages/Login.jsx
+import React, { useState } from "react";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../firebase";
+import { useNavigate } from "react-router-dom";
+import "./login.css";
 
-function Login() {
+const Login = () => {
+  const [email, setEmail] = useState("");
+  const [motDePasse, setMotDePasse] = useState("");
+  const [message, setMessage] = useState("");
   const navigate = useNavigate();
-  const [email, setEmail] = useState('');
-  const [motDePasse, setMotDePasse] = useState('');
-  const [erreur, setErreur] = useState('');
-  const [loading, setLoading] = useState(false);
 
-  const handleConnexion = async (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    setErreur('');
-    setLoading(true);
-
     try {
       await signInWithEmailAndPassword(auth, email, motDePasse);
-      navigate('/dashboard'); // redirection vers dashboard
+      setMessage("✅ Connexion réussie !");
+      setTimeout(() => navigate("/dashboard"), 1000);
     } catch (error) {
-      setErreur("❌ Identifiants incorrects ou problème de connexion.");
-    } finally {
-      setLoading(false);
+      console.error(error);
+      setMessage("❌ Erreur : Email ou mot de passe incorrect.");
     }
   };
 
   return (
     <div className="login-container">
-      <form onSubmit={handleConnexion} className="login-box">
+      <div className="login-card">
         <h2>Connexion</h2>
-        {erreur && <div className="error-message">{erreur}</div>}
-        <input
-          type="email"
-          placeholder="Adresse email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <input
-          type="password"
-          placeholder="Mot de passe"
-          value={motDePasse}
-          onChange={(e) => setMotDePasse(e.target.value)}
-          required
-        />
-        <button type="submit" disabled={loading}>
-          {loading ? 'Connexion...' : 'Se connecter'}
-        </button>
-        <p className="redirect-link">
-          Pas encore de compte ? <span onClick={() => navigate('/register')}>S’inscrire</span>
+        <form onSubmit={handleLogin}>
+          <input
+            type="email"
+            placeholder="Adresse e-mail"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+          <input
+            type="password"
+            placeholder="Mot de passe"
+            value={motDePasse}
+            onChange={(e) => setMotDePasse(e.target.value)}
+            required
+          />
+          <button type="submit">Se connecter</button>
+        </form>
+        <p className="message">{message}</p>
+        <p className="inscription-lien">
+          Pas encore de compte ? <a href="/register">Inscription</a>
         </p>
-      </form>
+      </div>
     </div>
   );
-}
+};
 
 export default Login;
 
