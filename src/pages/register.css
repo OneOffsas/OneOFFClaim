@@ -1,64 +1,104 @@
-/* register.css */
-.register-page {
-  min-height: 100vh;
-  background: linear-gradient(120deg, #4e54c8, #8f94fb);
-  background-size: 400% 400%;
-  animation: gradientMove 15s ease infinite;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-family: "Segoe UI", sans-serif;
-}
+// src/pages/register.jsx
+import { useState } from 'react';
+import { auth } from '../firebase';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
-@keyframes gradientMove {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
+const Register = () => {
+  const [email, setEmail] = useState('');
+  const [nom, setNom] = useState('');
+  const [prenom, setPrenom] = useState('');
+  const [password, setPassword] = useState('');
+  const [message, setMessage] = useState('');
+  const navigate = useNavigate();
 
-.glass-card {
-  backdrop-filter: blur(14px);
-  background-color: rgba(255, 255, 255, 0.1);
-  padding: 2rem;
-  border-radius: 16px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
-  width: 90%;
-  max-width: 400px;
-  color: white;
-  text-align: center;
-  border: 1px solid rgba(255, 255, 255, 0.18);
-}
+  const handleRegister = async (e) => {
+    e.preventDefault();
+    setMessage('⏳ Création du compte...');
 
-.glass-card input {
-  width: 100%;
-  padding: 12px;
-  margin: 10px 0;
-  border: none;
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.3);
-  color: #000;
-  font-size: 1em;
-}
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
 
-.glass-card button {
-  width: 100%;
-  padding: 12px;
-  margin-top: 10px;
-  background-color: #ffffff;
-  color: #4e54c8;
-  border: none;
-  border-radius: 8px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background 0.3s ease;
-}
+      const userData = {
+        email: email,
+        nom: nom,
+        prenom: prenom,
+        role: 'Client',
+        actif: true,
+      };
 
-.glass-card button:hover {
-  background-color: #e0e0e0;
-}
+      // ✅ Remplace bien ici l’URL par celle de ton Apps Script
+      const response = await axios.post(
+        'https://script.google.com/macros/s/AKfycbzm3MrvKRQy75IMnHosYHC1zHvIIxq-kf53ZwV9J2YatrP6C90MCO7JJHjSFxOnQdle/exec',
+        { ...userData }
+      );
 
-.message {
-  margin-top: 15px;
-  font-weight: bold;
-  color: #fffa;
-}
+      if (response.data.result === 'success') {
+        setMessage('✅ Inscription réussie ! Redirection en cours...');
+        setTimeout(() => navigate('/login'), 2000);
+      } else {
+        setMessage('❌ Erreur lors de l\'enregistrement Sheets.');
+      }
+    } catch (error) {
+      if (error.code === 'auth/email-already-in-use') {
+        setMessage('❌ Cette adresse email est déjà utilisée.');
+      } else if (error.message.includes('Network Error')) {
+        setMessage('❌ Erreur réseau. Vérifie ta connexion.');
+      } else {
+        setMessage(`❌ Erreur : ${error.message}`);
+      }
+    }
+  };
+
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-violet-600 to-blue-800 px-6">
+      <div className="bg-white bg-opacity-90 shadow-xl rounded-lg p-10 w-full max-w-md backdrop-blur-md">
+        <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">Créer un compte</h2>
+        <form onSubmit={handleRegister} className="space-y-4">
+          <input
+            type="text"
+            placeholder="Prénom"
+            value={prenom}
+            onChange={(e) => setPrenom(e.target.value)}
+            className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-400 focus:outline-none placeholder-gray-400"
+            required
+          />
+          <input
+            type="text"
+            placeholder="Nom"
+            value={nom}
+            onChange={(e) => setNom(e.target.value)}
+            className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-400 focus:outline-none placeholder-gray-400"
+            required
+          />
+          <input
+            type="email"
+            placeholder="Adresse email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-400 focus:outline-none placeholder-gray-400"
+            required
+          />
+          <input
+            type="password"
+            placeholder="Mot de passe"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-400 focus:outline-none placeholder-gray-400"
+            required
+          />
+          <button
+            type="submit"
+            className="w-full py-3 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700 transition duration-300"
+          >
+            S'inscrire
+          </button>
+        </form>
+        {message && <p className="mt-4 text-center text-sm text-gray-700">{message}</p>}
+      </div>
+    </div>
+  );
+};
+
+export default Register;
