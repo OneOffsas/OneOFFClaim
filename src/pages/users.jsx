@@ -1,126 +1,123 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+// src/pages/users.jsx
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { auth, db } from '../firebase';
+import { collection, getDocs, doc, updateDoc, addDoc } from 'firebase/firestore';
 
-const URL_API = "https://script.google.com/macros/s/AKfycbzm3MrvKRQy75IMnHosYHC1zHvIIxq-kf53ZwV9J2YatrP6C90MCO7JJHjSFxOnQdle/exec";
-
-export default function Users() {
+const UsersPage = () => {
+  const [userRole, setUserRole] = useState(null);
   const [users, setUsers] = useState([]);
-  const [editingUserId, setEditingUserId] = useState(null);
-  const [editedUser, setEditedUser] = useState({});
+  const [newUser, setNewUser] = useState({
+    Societe: '', Nom: '', Prenom: '', Email: '', Role: 'client'
+  });
+  const navigate = useNavigate();
 
   useEffect(() => {
-    axios
-      .post(URL_API, { action: "getAllUsers" })
-      .then((res) => {
-        setUsers(res.data);
-      })
-      .catch((err) => alert("Erreur : " + err.message));
+    const unsubscribe = auth.onAuthStateChanged(async (user) => {
+      if (user) {
+        const res = await fetch(
+          `https://script.google.com/macros/s/AKfycbzm3MrvKRQy75IMnHosYHC1zHvIIxq-kf53ZwV9J2YatrP6C90MCO7JJHjSFxOnQdle/exec?email=${user.email}`
+        );
+        const data = await res.json();
+        if (data?.Role === 'admin') {
+          setUserRole('admin');
+          loadUsers();
+        } else {
+          navigate('/');
+        }
+      } else {
+        navigate('/login');
+      }
+    });
+
+    return () => unsubscribe();
   }, []);
 
-  const handleEdit = (user) => {
-    setEditingUserId(user.ID_User);
-    setEditedUser({ ...user });
+  const loadUsers = async () => {
+    const usersCol = collection(db, 'UtilisateursClaimOneOff');
+    const snapshot = await getDocs(usersCol);
+    const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    setUsers(data);
   };
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setEditedUser((prev) => ({ ...prev, [name]: value }));
+  const handleChange = (id, field, value) => {
+    setUsers(users.map(user => (user.id === id ? { ...user, [field]: value } : user)));
   };
 
-  const handleSave = () => {
-    axios
-      .post(URL_API, {
-        action: "updateUser",
-        ID_User: editedUser.ID_User,
-        Societe: editedUser.Societe,
-        Nom: editedUser.Nom,
-        Prenom: editedUser.Prenom,
-        Email: editedUser.Email,
-        Role: editedUser.Role,
-        Actif: editedUser.Actif,
-      })
-      .then(() => {
-        alert("Utilisateur mis à jour !");
-        setEditingUserId(null);
-        setEditedUser({});
-        return axios.post(URL_API, { action: "getAllUsers" });
-      })
-      .then((res) => setUsers(res.data))
-      .catch((err) => alert("Erreur : " + err.message));
+  const saveUser = async (id, user) => {
+    await updateDoc(doc(db, 'UtilisateursClaimOneOff', id), user);
+    alert('Utilisateur mis à jour');
   };
+
+  const createUser = async () => {
+    if (!newUser.Email) return alert('Email requis');
+    const created = {
+      ...newUser,
+      Actif: 'oui',
+      Date_Inscription: new Date().toISOString(),
+      Derniere_Connexion: ''
+    };
+    await addDoc(collection(db, 'UtilisateursClaimOneOff'), created);
+
+    // Google Sheets
+    await fetch(
+      `https://script.google.com/macros/s/AKfycbzm3MrvKRQy75IMnHosYHC1zHvIIxq-kf53ZwV9J2YatrP6C90MCO7JJHjSFxOnQdle/exec`,
+      {
+        method: 'POST',
+        body: JSON.stringify({ action: 'add_user', ...created }),
+        headers: { 'Content-Type': 'application/json' }
+      }
+    );
+
+    alert('Utilisateur ajouté');
+    setNewUser({ Societe: '', Nom: '', Prenom: '', Email: '', Role: 'client' });
+    loadUsers();
+  };
+
+  if (userRole !== 'admin') return null;
 
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-6">Gestion des utilisateurs</h1>
-      <table className="w-full table-auto border-collapse border border-gray-300">
-        <thead>
-          <tr className="bg-gray-100">
-            <th className="border p-2">Nom</th>
-            <th className="border p-2">Prénom</th>
-            <th className="border p-2">Email</th>
-            <th className="border p-2">Société</th>
-            <th className="border p-2">Rôle</th>
-            <th className="border p-2">Actif</th>
-            <th className="border p-2">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {users.map((user) => (
-            <tr key={user.ID_User} className="text-center">
-              {editingUserId === user.ID_User ? (
-                <>
-                  <td className="border p-1">
-                    <input name="Nom" value={editedUser.Nom} onChange={handleChange} />
-                  </td>
-                  <td className="border p-1">
-                    <input name="Prenom" value={editedUser.Prenom} onChange={handleChange} />
-                  </td>
-                  <td className="border p-1">
-                    <input name="Email" value={editedUser.Email} onChange={handleChange} />
-                  </td>
-                  <td className="border p-1">
-                    <input name="Societe" value={editedUser.Societe} onChange={handleChange} />
-                  </td>
-                  <td className="border p-1">
-                    <select name="Role" value={editedUser.Role} onChange={handleChange}>
-                      <option value="Client">Client</option>
-                      <option value="Admin">Admin</option>
-                    </select>
-                  </td>
-                  <td className="border p-1">
-                    <select name="Actif" value={editedUser.Actif} onChange={handleChange}>
-                      <option value="Oui">Oui</option>
-                      <option value="Non">Non</option>
-                    </select>
-                  </td>
-                  <td className="border p-1">
-                    <button onClick={handleSave} className="bg-green-500 text-white px-2 py-1 rounded">
-                      💾 Sauver
-                    </button>
-                  </td>
-                </>
-              ) : (
-                <>
-                  <td className="border p-1">{user.Nom}</td>
-                  <td className="border p-1">{user.Prenom}</td>
-                  <td className="border p-1">{user.Email}</td>
-                  <td className="border p-1">{user.Societe}</td>
-                  <td className="border p-1">{user.Role}</td>
-                  <td className="border p-1">{user.Actif}</td>
-                  <td className="border p-1">
-                    <button
-                      onClick={() => handleEdit(user)}
-                      className="bg-blue-500 text-white px-2 py-1 rounded"
-                    >
-                      ✏️ Modifier
-                    </button>
-                  </td>
-                </>
-              )}
-            </tr>
+    <div className="p-4">
+      <h1 className="text-2xl font-bold mb-4">Gestion des utilisateurs</h1>
+
+      <div className="mb-6 border p-4 rounded bg-gray-50">
+        <h2 className="font-semibold mb-2">Ajouter un utilisateur</h2>
+        <div className="grid grid-cols-2 gap-2">
+          {['Societe', 'Nom', 'Prenom', 'Email'].map(field => (
+            <input key={field} type="text" placeholder={field}
+              className="border p-2" value={newUser[field]}
+              onChange={(e) => setNewUser({ ...newUser, [field]: e.target.value })}
+            />
           ))}
-        </tbody>
-      </table>
+          <select className="border p-2" value={newUser.Role}
+            onChange={(e) => setNewUser({ ...newUser, Role: e.target.value })}>
+            <option value="client">Client</option>
+            <option value="admin">Admin</option>
+          </select>
+          <button onClick={createUser} className="bg-blue-600 text-white px-4 py-2 rounded">Créer</button>
+        </div>
+      </div>
+
+      {users.map(user => (
+        <div key={user.id} className="border-b py-2 grid grid-cols-6 gap-2 items-center">
+          <input type="text" value={user.Nom} className="border p-1"
+            onChange={(e) => handleChange(user.id, 'Nom', e.target.value)} />
+          <input type="text" value={user.Prenom} className="border p-1"
+            onChange={(e) => handleChange(user.id, 'Prenom', e.target.value)} />
+          <input type="text" value={user.Email} className="border p-1"
+            onChange={(e) => handleChange(user.id, 'Email', e.target.value)} />
+          <input type="text" value={user.Societe} className="border p-1"
+            onChange={(e) => handleChange(user.id, 'Societe', e.target.value)} />
+          <select value={user.Role} className="border p-1"
+            onChange={(e) => handleChange(user.id, 'Role', e.target.value)}>
+            <option value="client">Client</option>
+            <option value="admin">Admin</option>
+          </select>
+          <button onClick={() => saveUser(user.id, user)} className="bg-green-500 text-white px-2 py-1 rounded">💾</button>
+        </div>
+      ))}
     </div>
   );
-}
+};
+
+export default UsersPage;
