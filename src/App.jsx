@@ -1,37 +1,26 @@
 // src/App.jsx
 
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import Register from './pages/register';
-import Login from './pages/login';
-import Dashboard from './pages/dashboard';
-import { auth } from './firebase';
-import { onAuthStateChanged } from 'firebase/auth';
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Navbar from "./components/Navbar";
+import Register from "./pages/register";
+import Login from "./pages/login";
+import Dashboard from "./pages/dashboard";
 
-function App() {
-  const [user, setUser] = React.useState(null);
-  const [loading, setLoading] = React.useState(true);
-
-  React.useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (utilisateur) => {
-      setUser(utilisateur);
-      setLoading(false);
-    });
-    return () => unsubscribe();
-  }, []);
-
-  if (loading) return <div className="p-10 text-center text-xl">Chargement...</div>;
-
+const App = () => {
   return (
     <Router>
-      <Routes>
-        <Route path="/" element={user ? <Navigate to="/dashboard" /> : <Navigate to="/login" />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/dashboard" element={user ? <Dashboard /> : <Navigate to="/login" />} />
-      </Routes>
+      <div className="bg-gray-100 min-h-screen">
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<div className="p-10 text-xl">Bienvenue sur ClaimOneOff 🎯</div>} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+        </Routes>
+      </div>
     </Router>
   );
-}
+};
 
 export default App;
