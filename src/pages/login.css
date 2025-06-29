@@ -1,69 +1,80 @@
-.login-container {
-  background: linear-gradient(135deg, #2e026d, #15162c);
+/* src/pages/login.css */
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, #2e2e8f, #4b0082, #1f1f3b);
+  background-size: 400% 400%;
+  animation: gradient 15s ease infinite;
   height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-family: 'Segoe UI', sans-serif;
 }
 
-.login-box {
-  background: rgba(255, 255, 255, 0.08);
-  padding: 3rem;
-  border-radius: 1rem;
-  backdrop-filter: blur(10px);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-  width: 90%;
+.login-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.login-card {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(12px);
+  border-radius: 16px;
+  padding: 40px;
+  width: 100%;
   max-width: 400px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
   text-align: center;
   color: white;
 }
 
-.login-box h2 {
-  margin-bottom: 1.5rem;
-  font-size: 2rem;
+.login-card h2 {
+  margin-bottom: 20px;
 }
 
-.login-box input {
+.login-card input {
   width: 100%;
-  padding: 0.75rem;
-  margin: 0.75rem 0;
+  padding: 12px;
+  margin: 12px 0;
   border: none;
-  border-radius: 0.5rem;
-  font-size: 1rem;
+  border-radius: 8px;
+  font-size: 16px;
+  outline: none;
 }
 
-.login-box button {
+.login-card button {
   width: 100%;
-  padding: 0.75rem;
+  padding: 12px;
+  background: #ffffff;
+  color: #1f1f3b;
+  font-weight: bold;
+  font-size: 16px;
   border: none;
-  background-color: #3b82f6;
-  color: white;
-  font-size: 1rem;
-  border-radius: 0.5rem;
+  border-radius: 8px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: 0.3s ease;
 }
 
-.login-box button:hover {
-  background-color: #2563eb;
+.login-card button:hover {
+  background: #e0e0e0;
 }
 
-.error-message {
-  background-color: rgba(255, 0, 0, 0.2);
-  color: #ffdddd;
-  padding: 0.5rem;
-  margin-bottom: 1rem;
-  border-radius: 0.5rem;
+.message {
+  margin-top: 10px;
+  font-weight: bold;
 }
 
-.redirect-link {
-  margin-top: 1rem;
-  font-size: 0.9rem;
+.inscription-lien {
+  margin-top: 20px;
+  font-size: 14px;
 }
 
-.redirect-link span {
-  color: #60a5fa;
-  cursor: pointer;
+.inscription-lien a {
+  color: #fff;
   text-decoration: underline;
+}
+
+@keyframes gradient {
+  0% {background-position: 0% 50%;}
+  50% {background-position: 100% 50%;}
+  100% {background-position: 0% 50%;}
 }
