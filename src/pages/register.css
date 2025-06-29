@@ -1,0 +1,64 @@
+/* register.css */
+.register-page {
+  min-height: 100vh;
+  background: linear-gradient(120deg, #4e54c8, #8f94fb);
+  background-size: 400% 400%;
+  animation: gradientMove 15s ease infinite;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: "Segoe UI", sans-serif;
+}
+
+@keyframes gradientMove {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.glass-card {
+  backdrop-filter: blur(14px);
+  background-color: rgba(255, 255, 255, 0.1);
+  padding: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
+  width: 90%;
+  max-width: 400px;
+  color: white;
+  text-align: center;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.glass-card input {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border: none;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.3);
+  color: #000;
+  font-size: 1em;
+}
+
+.glass-card button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 10px;
+  background-color: #ffffff;
+  color: #4e54c8;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.glass-card button:hover {
+  background-color: #e0e0e0;
+}
+
+.message {
+  margin-top: 15px;
+  font-weight: bold;
+  color: #fffa;
+}
