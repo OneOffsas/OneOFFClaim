@@ -1,22 +1,23 @@
 .landing-container {
   height: 100vh;
-  width: 100%;
-  background: linear-gradient(120deg, #2d2dff, #9b59b6);
+  width: 100vw;
+  background: linear-gradient(135deg, #141e30, #243b55);
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
   position: relative;
   overflow: hidden;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Segoe UI', sans-serif;
 }
 
 .overlay {
   position: absolute;
   top: 0;
   left: 0;
-  height: 100%;
   width: 100%;
-  background: rgba(15, 15, 15, 0.5);
+  height: 100%;
+  background: url('https://www.transparenttextures.com/patterns/cubes.png');
+  opacity: 0.07;
   z-index: 1;
 }
 
@@ -29,51 +30,52 @@
 
 .title {
   font-size: 4rem;
-  font-weight: 800;
+  font-weight: bold;
   margin-bottom: 1rem;
-  letter-spacing: 2px;
+  background: linear-gradient(90deg, #00c6ff, #0072ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .subtitle {
   font-size: 1.5rem;
-  margin-bottom: 2.5rem;
+  margin-bottom: 2rem;
   color: #f0f0f0;
 }
 
 .buttons {
   display: flex;
-  gap: 1.5rem;
+  gap: 1rem;
   justify-content: center;
-  flex-wrap: wrap;
 }
 
-.btn-primary, .btn-secondary {
-  padding: 0.75rem 2rem;
+.btn-primary,
+.btn-secondary {
+  padding: 0.9rem 2rem;
   font-size: 1.1rem;
+  border-radius: 8px;
   border: none;
-  border-radius: 50px;
-  cursor: pointer;
   text-decoration: none;
-  transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease;
 }
 
 .btn-primary {
-  background-color: #ffffff;
-  color: #2d2dff;
-}
-
-.btn-secondary {
-  background-color: transparent;
-  border: 2px solid #ffffff;
+  background-color: #00c6ff;
   color: white;
 }
 
 .btn-primary:hover {
-  background-color: #e0e0e0;
+  background-color: #0072ff;
+}
+
+.btn-secondary {
+  background-color: transparent;
+  border: 2px solid white;
+  color: white;
 }
 
 .btn-secondary:hover {
   background-color: white;
-  color: #2d2dff;
+  color: #243b55;
 }
 
