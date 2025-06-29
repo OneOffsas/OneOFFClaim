@@ -1,9 +1,11 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
 import Landing from "./pages/Landing";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import Dashboard from "./pages/Dashboard"; // à créer plus tard si tu veux
+import Dashboard from "./pages/Dashboard"; // tu peux créer un fichier temporaire vide pour l’instant
+
 import "./App.css";
 
 function App() {
