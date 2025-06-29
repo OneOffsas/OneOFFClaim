@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { auth } from "../firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../firebase";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import './register.css'; // Assure-toi d’avoir ce fichier de styles
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -12,82 +13,61 @@ const Register = () => {
     email: "",
     password: "",
   });
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
+  const [message, setMessage] = useState("");
   const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-    setError("");
-    setSuccess("");
+    setMessage("");
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Création utilisateur dans Firebase Auth
-      const userCredential = await createUserWithEmailAndPassword(
-        auth,
-        formData.email,
-        formData.password
-      );
-      const user = userCredential.user;
+      // Étape 1 : Crée l'utilisateur dans Firebase
+      await createUserWithEmailAndPassword(auth, formData.email, formData.password);
 
-      // Enregistrement dans Google Sheets via Apps Script
-      await axios.post(
-        "https://script.google.com/macros/s/AKfycbzm3MrvKRQy75IMnHosYHC1zHvIIxq-kf53ZwV9J2YatrP6C90MCO7JJHjSFxOnQdle/exec",
-        {
-          societe: formData.societe,
-          prenom: formData.prenom,
-          nom: formData.nom,
-          email: formData.email,
-          role: "client",
-          actif: "oui",
-        }
-      );
+      // Étape 2 : Enregistre aussi dans Google Sheets via Apps Script
+      await axios.post("https://script.google.com/macros/s/AKfycbzm3MrvKRQy75IMnHosYHC1zHvIIxq-kf53ZwV9J2YatrP6C90MCO7JJHjSFxOnQdle/exec", {
+        Societe: formData.societe,
+        Prenom: formData.prenom,
+        Nom: formData.nom,
+        Email: formData.email,
+        Role: "client",
+        Actif: "oui",
+        Date_Inscription: new Date().toISOString(),
+        Derniere_Connexion: "",
+      });
 
-      setSuccess("Inscription réussie ! Redirection...");
+      setMessage("✅ Inscription réussie !");
       setTimeout(() => navigate("/login"), 2000);
-    } catch (err) {
-      console.error(err);
-      setError("❌ Erreur : " + (err.response?.data || err.message));
+    } catch (error) {
+      if (error.message.includes("email-already-in-use")) {
+        setMessage("❌ Cette adresse email est déjà utilisée.");
+      } else if (error.message.includes("Network Error")) {
+        setMessage("❌ Erreur réseau. Vérifie ta connexion.");
+      } else {
+        setMessage(`❌ Erreur : ${error.message}`);
+      }
     }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-600 via-blue-600 to-indigo-800 flex items-center justify-center relative overflow-hidden">
-      <div className="absolute inset-0 bg-white bg-opacity-10 backdrop-blur-md rounded-xl m-4 shadow-2xl border border-white/20" />
-
-      <div className="relative z-10 p-10 w-full max-w-lg bg-white/20 rounded-2xl shadow-xl backdrop-blur-md border border-white/30">
-        <h2 className="text-3xl font-bold text-white text-center mb-6 drop-shadow">
-          Créer un compte
-        </h2>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          {["societe", "prenom", "nom", "email", "password"].map((field) => (
-            <input
-              key={field}
-              type={field === "email" ? "email" : field === "password" ? "password" : "text"}
-              name={field}
-              value={formData[field]}
-              onChange={handleChange}
-              placeholder={field.charAt(0).toUpperCase() + field.slice(1)}
-              className="w-full p-3 bg-white/30 rounded-md border border-white/40 text-white placeholder-white placeholder-opacity-70 focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-60 transition"
-              required
-            />
-          ))}
-          <button
-            type="submit"
-            className="w-full py-3 bg-white text-indigo-800 font-semibold rounded-md hover:bg-opacity-80 transition"
-          >
-            S’inscrire
-          </button>
+    <div className="register-page">
+      <div className="glass-card">
+        <h2>Créer un compte</h2>
+        <form onSubmit={handleSubmit}>
+          <input type="text" name="societe" placeholder="Société" onChange={handleChange} required />
+          <input type="text" name="prenom" placeholder="Prénom" onChange={handleChange} required />
+          <input type="text" name="nom" placeholder="Nom" onChange={handleChange} required />
+          <input type="email" name="email" placeholder="Email" onChange={handleChange} required />
+          <input type="password" name="password" placeholder="Mot de passe" onChange={handleChange} required />
+          <button type="submit">S'inscrire</button>
         </form>
-        {error && <p className="text-red-300 mt-4 text-sm">{error}</p>}
-        {success && <p className="text-green-300 mt-4 text-sm">{success}</p>}
+        {message && <p className="message">{message}</p>}
       </div>
     </div>
   );
 };
 
 export default Register;
-
