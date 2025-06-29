@@ -1,56 +1,61 @@
-import React, { useState } from "react";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../firebase"; // Assure-toi que ce fichier est bien configuré
-import "./register.css";
+import React, { useState } from 'react';
+import './register.css';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../firebase';
 
 function Register() {
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
-  const [message, setMessage] = useState("");
+  const [email, setEmail] = useState('');
+  const [motDePasse, setMotDePasse] = useState('');
+  const [confirmation, setConfirmation] = useState('');
+  const [message, setMessage] = useState('');
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = async (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
-    setMessage("⏳ Création du compte...");
-
+    if (motDePasse !== confirmation) {
+      setMessage('❌ Les mots de passe ne correspondent pas.');
+      return;
+    }
     try {
-      await createUserWithEmailAndPassword(auth, formData.email, formData.password);
-      setMessage("✅ Inscription réussie !");
+      await createUserWithEmailAndPassword(auth, email, motDePasse);
+      setMessage('✅ Inscription réussie !');
     } catch (error) {
-      setMessage(`❌ Erreur : ${error.message}`);
+      console.error(error);
+      setMessage('❌ Erreur : ' + error.message);
     }
   };
 
   return (
-    <div className="register-container">
-      <form className="register-form" onSubmit={handleSubmit}>
-        <h2>Créer un compte</h2>
+    <div className="auth-container">
+      <form className="auth-card" onSubmit={handleRegister}>
+        <h2>Inscription</h2>
         <input
           type="email"
-          name="email"
-          placeholder="Adresse email"
-          value={formData.email}
-          onChange={handleChange}
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
           required
         />
         <input
           type="password"
-          name="password"
           placeholder="Mot de passe"
-          value={formData.password}
-          onChange={handleChange}
+          value={motDePasse}
+          onChange={(e) => setMotDePasse(e.target.value)}
           required
         />
-        <button type="submit">S'inscrire</button>
-        {message && <p className="register-message">{message}</p>}
+        <input
+          type="password"
+          placeholder="Confirmer le mot de passe"
+          value={confirmation}
+          onChange={(e) => setConfirmation(e.target.value)}
+          required
+        />
+        <button type="submit">Créer un compte</button>
+        <p className="message">{message}</p>
+        <p className="link">Déjà inscrit ? <a href="/login">Se connecter</a></p>
       </form>
     </div>
   );
 }
 
 export default Register;
+
