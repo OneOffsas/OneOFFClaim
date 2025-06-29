@@ -1,88 +1,82 @@
 // src/pages/register.jsx
 import React, { useState } from "react";
-import { auth, db } from "../firebase";
+import { auth } from "../firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { doc, setDoc } from "firebase/firestore";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 const Register = () => {
+  const [email, setEmail] = useState("");
+  const [motDePasse, setMotDePasse] = useState("");
+  const [message, setMessage] = useState("");
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    societe: "",
-    nom: "",
-    prenom: "",
-    email: "",
-    motDePasse: "",
-  });
-  const [erreur, setErreur] = useState("");
 
-  const handleChange = (e) => {
-    setFormData((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-    }));
-  };
-
-  const handleSubmit = async (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
-    setErreur("");
-
     try {
-      const { user } = await createUserWithEmailAndPassword(
+      const userCredential = await createUserWithEmailAndPassword(
         auth,
-        formData.email,
-        formData.motDePasse
+        email,
+        motDePasse
       );
 
-      // Enregistrement dans Firestore
-      await setDoc(doc(db, "UtilisateursClaimOneOff", user.uid), {
-        ID_User: user.uid,
-        Societe: formData.societe,
-        Nom: formData.nom,
-        Prenom: formData.prenom,
-        Email: formData.email,
+      // Si l'inscription est OK dans Firebase
+      setMessage("✅ Inscription réussie !");
+      const utilisateur = userCredential.user;
+
+      // Envoi des données vers Google Sheets
+      await axios.post("https://script.google.com/macros/s/AKfycbzm3MrvKRQy75IMnHosYHC1zHvIIxq-kf53ZwV9J2YatrP6C90MCO7JJHjSFxOnQdle/exec", {
+        Email: utilisateur.email,
         Role: "client",
-        Actif: true,
+        Actif: "oui",
         Date_Inscription: new Date().toISOString(),
-        Derniere_Connexion: "",
       });
 
-      console.log("✅ Utilisateur créé avec succès dans Firestore");
-
-      // Redirection vers le login
-      navigate("/login");
-
-    } catch (err) {
-      console.error("❌ Erreur à l'inscription :", err);
-      if (err.code === "auth/email-already-in-use") {
-        setErreur("Cette adresse email est déjà utilisée.");
-      } else if (err.code === "auth/weak-password") {
-        setErreur("Le mot de passe est trop faible (min. 6 caractères).");
-      } else if (err.code === "auth/invalid-email") {
-        setErreur("Adresse email invalide.");
-      } else {
-        setErreur("Erreur réseau ou inconnue. Réessaye plus tard.");
-      }
+      // Redirection après quelques secondes
+      setTimeout(() => {
+        navigate("/login");
+      }, 2000);
+    } catch (error) {
+      setMessage(`❌ Erreur : ${error.message}`);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-800 to-indigo-800 text-white">
-      <div className="w-full max-w-md bg-white rounded-xl p-8 shadow-2xl text-gray-800">
-        <h1 className="text-2xl font-bold mb-4 text-center">Créer un compte</h1>
-        {erreur && <div className="bg-red-100 text-red-700 p-3 mb-4 rounded">{erreur}</div>}
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <input name="societe" onChange={handleChange} type="text" placeholder="Société" className="w-full p-3 border rounded" required />
-          <input name="nom" onChange={handleChange} type="text" placeholder="Nom" className="w-full p-3 border rounded" required />
-          <input name="prenom" onChange={handleChange} type="text" placeholder="Prénom" className="w-full p-3 border rounded" required />
-          <input name="email" onChange={handleChange} type="email" placeholder="Email" className="w-full p-3 border rounded" required />
-          <input name="motDePasse" onChange={handleChange} type="password" placeholder="Mot de passe" className="w-full p-3 border rounded" required />
-          <button type="submit" className="w-full bg-indigo-600 text-white p-3 rounded hover:bg-indigo-700 transition">S’inscrire</button>
-        </form>
-      </div>
+    <div className="flex justify-center items-center h-screen bg-gray-100">
+      <form
+        onSubmit={handleRegister}
+        className="bg-white p-6 rounded shadow-md w-full max-w-md"
+      >
+        <h2 className="text-2xl font-bold mb-4">Créer un compte</h2>
+        <input
+          type="email"
+          placeholder="Email"
+          className="w-full mb-3 p-2 border rounded"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+        <input
+          type="password"
+          placeholder="Mot de passe"
+          className="w-full mb-3 p-2 border rounded"
+          value={motDePasse}
+          onChange={(e) => setMotDePasse(e.target.value)}
+          required
+        />
+        <button
+          type="submit"
+          className="bg-blue-600 text-white p-2 rounded w-full hover:bg-blue-700"
+        >
+          S'inscrire
+        </button>
+        {message && (
+          <p className="mt-4 text-sm text-center">{message}</p>
+        )}
+      </form>
     </div>
   );
 };
 
 export default Register;
+
