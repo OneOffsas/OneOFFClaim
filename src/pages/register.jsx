@@ -3,7 +3,6 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import './register.css'; // Assure-toi d’avoir ce fichier de styles
 
 const Register = () => {
   const [formData, setFormData] = useState({
