@@ -1,62 +1,70 @@
 .register-container {
-  min-height: 100vh;
-  background: linear-gradient(135deg, #4f46e5, #6b21a8);
+  background: linear-gradient(135deg, #2e026d, #15162c);
+  height: 100vh;
   display: flex;
-  align-items: center;
   justify-content: center;
-  font-family: "Segoe UI", sans-serif;
+  align-items: center;
+  font-family: 'Segoe UI', sans-serif;
 }
 
-.register-form {
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(20px);
-  padding: 40px;
-  border-radius: 15px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-  width: 100%;
-  max-width: 400px;
-  color: white;
+.register-box {
+  background: rgba(255, 255, 255, 0.08);
+  padding: 3rem;
+  border-radius: 1rem;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  width: 90%;
+  max-width: 420px;
   text-align: center;
-}
-
-.register-form h2 {
-  margin-bottom: 20px;
-  font-weight: 600;
-  font-size: 24px;
-}
-
-.register-form input {
-  width: 100%;
-  margin-bottom: 15px;
-  padding: 12px 15px;
-  border: none;
-  border-radius: 8px;
-  font-size: 16px;
-  background: rgba(255, 255, 255, 0.8);
-}
-
-.register-form input::placeholder {
-  color: #555;
-}
-
-.register-form button {
-  width: 100%;
-  padding: 12px;
-  border: none;
-  background-color: #10b981;
   color: white;
-  font-size: 16px;
-  font-weight: bold;
-  border-radius: 8px;
+}
+
+.register-box h2 {
+  margin-bottom: 1.5rem;
+  font-size: 2rem;
+}
+
+.register-box input {
+  width: 100%;
+  padding: 0.75rem;
+  margin: 0.5rem 0;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+}
+
+.register-box button {
+  width: 100%;
+  padding: 0.75rem;
+  margin-top: 1rem;
+  border: none;
+  background-color: #3b82f6;
+  color: white;
+  font-size: 1rem;
+  border-radius: 0.5rem;
   cursor: pointer;
-  transition: background 0.3s ease;
+  transition: background-color 0.3s ease;
 }
 
-.register-form button:hover {
-  background-color: #059669;
+.register-box button:hover {
+  background-color: #2563eb;
 }
 
-.register-message {
-  margin-top: 15px;
-  font-weight: 500;
+.message-box {
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 0.5rem;
+  font-size: 0.95rem;
+}
+
+.redirect-link {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+}
+
+.redirect-link span {
+  color: #60a5fa;
+  cursor: pointer;
+  text-decoration: underline;
 }
