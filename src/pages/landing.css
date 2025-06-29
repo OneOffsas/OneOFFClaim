@@ -1,88 +1,80 @@
-/* Réinitialisation de base */
-body, html {
-  margin: 0;
-  padding: 0;
+.landing-container {
+  height: 100vh;
+  width: 100%;
+  background: linear-gradient(120deg, #2d2dff, #9b59b6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(to right, #667eea, #764ba2);
-  color: white;
-  height: 100%;
-  overflow-x: hidden;
 }
 
-/* Centrage du contenu principal */
-.landing-container {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background: rgba(15, 15, 15, 0.5);
+  z-index: 1;
+}
+
+.content {
+  z-index: 2;
   text-align: center;
+  color: white;
   padding: 2rem;
 }
 
-/* Titre principal */
-.landing-container h1 {
+.title {
   font-size: 4rem;
+  font-weight: 800;
   margin-bottom: 1rem;
-  color: #ffffff;
+  letter-spacing: 2px;
 }
 
-.landing-container h1 span {
-  color: #ffda79;
-}
-
-/* Sous-titre */
-.landing-container p {
+.subtitle {
   font-size: 1.5rem;
-  max-width: 700px;
-  margin-bottom: 2rem;
-  line-height: 1.6;
+  margin-bottom: 2.5rem;
+  color: #f0f0f0;
 }
 
-/* Boutons */
-.landing-buttons {
+.buttons {
   display: flex;
-  gap: 1rem;
+  gap: 1.5rem;
+  justify-content: center;
+  flex-wrap: wrap;
 }
 
-.landing-buttons a button {
-  padding: 1rem 2rem;
+.btn-primary, .btn-secondary {
+  padding: 0.75rem 2rem;
   font-size: 1.1rem;
   border: none;
-  border-radius: 8px;
-  background-color: #ffffff;
-  color: #333;
+  border-radius: 50px;
   cursor: pointer;
-  font-weight: bold;
-  transition: all 0.3s ease;
+  text-decoration: none;
+  transition: all 0.3s ease-in-out;
 }
 
-.landing-buttons a button:hover {
-  transform: scale(1.05);
-  box-shadow: 0 4px 20px rgba(255, 255, 255, 0.3);
+.btn-primary {
+  background-color: #ffffff;
+  color: #2d2dff;
 }
 
-.landing-buttons a button.secondary {
-  background-color: #ffda79;
-  color: #333;
+.btn-secondary {
+  background-color: transparent;
+  border: 2px solid #ffffff;
+  color: white;
 }
 
-/* Responsive */
-@media screen and (max-width: 768px) {
-  .landing-container h1 {
-    font-size: 2.5rem;
-  }
+.btn-primary:hover {
+  background-color: #e0e0e0;
+}
 
-  .landing-container p {
-    font-size: 1.2rem;
-  }
+.btn-secondary:hover {
+  background-color: white;
+  color: #2d2dff;
+}
 
-  .landing-buttons {
-    flex-direction: column;
-    gap: 1.5rem;
-  }
-
-  .landing-buttons a button {
-    width: 100%;
-  }
 }
