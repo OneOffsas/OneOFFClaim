@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Landing from "./pages/Landing";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import Dashboard from "./pages/Dashboard"; // tu peux créer un fichier temporaire vide pour l’instant
+import Dashboard from "./pages/Dashboard";
 
 import "./App.css";
 
