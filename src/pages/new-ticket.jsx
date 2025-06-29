@@ -66,4 +66,40 @@ export default function NewTicket() {
             <label className="block font-semibold">Transporteur</label>
             <select name="Transporteur" value={formData.Transporteur} onChange={handleChange} required className="w-full p-2 border rounded">
               <option value="">-- Choisir --</option>
-              <option value
+              <option value="Colissimo">Colissimo</option>
+              <option value="Mondial Relay">Mondial Relay</option>
+              <option value="Chronopost">Chronopost</option>
+              <option value="GLS">GLS</option>
+              <option value="DPD">DPD</option>
+              <option value="Autre">Autre</option>
+            </select>
+          </div>
+
+          <div>
+            <label className="block font-semibold">Problématique</label>
+            <input name="Problematique" value={formData.Problematique} onChange={handleChange} required className="w-full p-2 border rounded" />
+          </div>
+
+          <div>
+            <label className="block font-semibold">Description</label>
+            <textarea name="Description" value={formData.Description} onChange={handleChange} required className="w-full p-2 border rounded" rows={3} />
+          </div>
+
+          <div>
+            <label className="block font-semibold">Urgence</label>
+            <select name="Urgence" value={formData.Urgence} onChange={handleChange} className="w-full p-2 border rounded">
+              <option value="Normale">Normale</option>
+              <option value="Haute">Haute</option>
+              <option value="Urgente">Urgente</option>
+            </select>
+          </div>
+
+          <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+            Enregistrer le ticket
+          </button>
+        </form>
+      </div>
+    </div>
+  );
+}
+
