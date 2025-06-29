@@ -1,69 +1,73 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import './register.css';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import axios from "axios";
+import "./register.css";
 
 const Register = () => {
   const [formData, setFormData] = useState({
-    societe: '',
-    nom: '',
-    prenom: '',
-    email: '',
-    motdepasse: '',
+    Societe: "",
+    Nom: "",
+    Prenom: "",
+    Email: "",
+    MotDePasse_Hash: "",
+    Role: "client",
+    Actif: "oui",
+    Date_Inscription: new Date().toISOString().split("T")[0],
+    Derniere_Connexion: "",
   });
 
-  const [message, setMessage] = useState('');
-  const navigate = useNavigate();
+  const [message, setMessage] = useState("");
 
   const handleChange = (e) => {
-    setFormData((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-    }));
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
-    setMessage('⏳ Envoi en cours...');
+    setMessage("⏳ Envoi en cours...");
 
     try {
-      await axios.post(
-        'https://script.google.com/macros/s/AKfycbzm3MrvKRQy75IMnHosYHC1zHvIIxq-kf53ZwV9J2YatrP6C90MCO7JJHjSFxOnQdle/exec',
-        new URLSearchParams({
-          societe: formData.societe,
-          nom: formData.nom,
-          prenom: formData.prenom,
-          email: formData.email,
-          motdepasse: formData.motdepasse,
-          role: 'client',
-          actif: 'true',
-          date_inscription: new Date().toISOString(),
-        }),
-        {
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-          },
-        }
-      );
+      const scriptURL = "https://script.google.com/macros/s/AKfycbzm3MrvKRQy75IMnHosYHC1zHvIIxq-kf53ZwV9J2YatrP6C90MCO7JJHjSFxOnQdle/exec";
 
-      setMessage('✅ Inscription réussie !');
-      setTimeout(() => navigate('/login'), 1500);
+      const response = await axios.post(scriptURL, {
+        action: "registerUser",
+        ...formData,
+      });
+
+      if (response.data.success) {
+        setMessage("✅ Inscription réussie !");
+        setFormData({
+          Societe: "",
+          Nom: "",
+          Prenom: "",
+          Email: "",
+          MotDePasse_Hash: "",
+          Role: "client",
+          Actif: "oui",
+          Date_Inscription: new Date().toISOString().split("T")[0],
+          Derniere_Connexion: "",
+        });
+      } else {
+        setMessage("❌ Erreur : " + response.data.message);
+      }
     } catch (error) {
-      setMessage('❌ Erreur : Network Error');
+      console.error("Erreur :", error);
+      setMessage("❌ Erreur : Erreur réseau ou serveur.");
     }
   };
 
   return (
     <div className="register-container">
-      <form className="register-form" onSubmit={handleSubmit}>
+      <form className="register-form" onSubmit={handleRegister}>
         <h2>Créer un compte</h2>
-        <input name="societe" placeholder="Société" onChange={handleChange} required />
-        <input name="nom" placeholder="Nom" onChange={handleChange} required />
-        <input name="prenom" placeholder="Prénom" onChange={handleChange} required />
-        <input type="email" name="email" placeholder="Email" onChange={handleChange} required />
-        <input type="password" name="motdepasse" placeholder="Mot de passe" onChange={handleChange} required />
+
+        <input type="text" name="Societe" placeholder="Société" value={formData.Societe} onChange={handleChange} required />
+        <input type="text" name="Nom" placeholder="Nom" value={formData.Nom} onChange={handleChange} required />
+        <input type="text" name="Prenom" placeholder="Prénom" value={formData.Prenom} onChange={handleChange} required />
+        <input type="email" name="Email" placeholder="Email" value={formData.Email} onChange={handleChange} required />
+        <input type="password" name="MotDePasse_Hash" placeholder="Mot de passe" value={formData.MotDePasse_Hash} onChange={handleChange} required />
+
         <button type="submit">S'inscrire</button>
-        {message && <p className="message">{message}</p>}
+        <p className="register-message">{message}</p>
       </form>
     </div>
   );
