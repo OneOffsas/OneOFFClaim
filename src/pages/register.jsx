@@ -1,70 +1,102 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { auth, db } from '../firebase';
+import { auth } from '../firebase';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { setDoc, doc, serverTimestamp } from 'firebase/firestore';
+import axios from 'axios';
 
-export default function Register() {
+function Register() {
+  const [email, setEmail] = useState('');
+  const [motdepasse, setMotdepasse] = useState('');
+  const [nom, setNom] = useState('');
+  const [prenom, setPrenom] = useState('');
+  const [societe, setSociete] = useState('');
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    societe: '',
-    nom: '',
-    prenom: '',
-    email: '',
-    password: '',
-    role: 'client',
-  });
-  const [error, setError] = useState('');
-
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+  const [message, setMessage] = useState('');
 
   const handleRegister = async (e) => {
     e.preventDefault();
-    const { societe, nom, prenom, email, password, role } = formData;
+    setMessage("Création du compte en cours...");
+
     try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      // Création du compte Firebase Auth
+      const userCredential = await createUserWithEmailAndPassword(auth, email, motdepasse);
       const user = userCredential.user;
 
-      await setDoc(doc(db, 'UtilisateursClaimOneOff', user.uid), {
-        ID_User: user.uid,
-        Societe: societe,
-        Nom: nom,
-        Prenom: prenom,
-        Email: email,
-        MotDePasse_Hash: password, // ⚠️ à remplacer par un vrai hash sécurisé si besoin
-        Role: role,
-        Actif: true,
-        Date_Inscription: serverTimestamp(),
-        Derniere_Connexion: null,
+      // Appel Google Apps Script pour ajouter l’utilisateur à Google Sheets
+      const response = await axios.post('https://script.google.com/macros/s/AKfycbzm3MrvKRQy75IMnHosYHC1zHvIIxq-kf53ZwV9J2YatrP6C90MCO7JJHjSFxOnQdle/exec', {
+        action: "register_user",
+        email: email,
+        motdepasse: motdepasse,
+        nom: nom,
+        prenom: prenom,
+        societe: societe,
       });
 
-      navigate('/login');
+      if (response.data.status === "success") {
+        setMessage("Compte créé avec succès !");
+        navigate("/dashboard");
+      } else {
+        setMessage("Erreur côté Google Sheets : " + response.data.message);
+      }
+
     } catch (error) {
-      setError(error.message);
+      console.error("Erreur d'inscription :", error);
+      setMessage("Erreur : " + error.message);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <form onSubmit={handleRegister} className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-        <h2 className="text-2xl font-bold mb-4">Inscription</h2>
-        {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
-        <input type="text" name="societe" placeholder="Société" onChange={handleChange} className="mb-2 px-3 py-2 border rounded w-full" />
-        <input type="text" name="nom" placeholder="Nom" onChange={handleChange} className="mb-2 px-3 py-2 border rounded w-full" />
-        <input type="text" name="prenom" placeholder="Prénom" onChange={handleChange} className="mb-2 px-3 py-2 border rounded w-full" />
-        <input type="email" name="email" placeholder="Email" onChange={handleChange} className="mb-2 px-3 py-2 border rounded w-full" />
-        <input type="password" name="password" placeholder="Mot de passe" onChange={handleChange} className="mb-2 px-3 py-2 border rounded w-full" />
-        <select name="role" onChange={handleChange} className="mb-4 px-3 py-2 border rounded w-full">
-          <option value="client">Client</option>
-          <option value="admin">Admin</option>
-        </select>
-        <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
-          S'inscrire
-        </button>
-      </form>
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-violet-600 to-indigo-700 p-4">
+      <div className="w-full max-w-md p-6 bg-white rounded-2xl shadow-xl">
+        <h1 className="text-2xl font-bold mb-6 text-center">Créer un compte</h1>
+        <form onSubmit={handleRegister} className="space-y-4">
+          <input
+            type="text"
+            placeholder="Société"
+            value={societe}
+            onChange={(e) => setSociete(e.target.value)}
+            className="w-full p-3 border border-gray-300 rounded-xl"
+            required
+          />
+          <input
+            type="text"
+            placeholder="Nom"
+            value={nom}
+            onChange={(e) => setNom(e.target.value)}
+            className="w-full p-3 border border-gray-300 rounded-xl"
+            required
+          />
+          <input
+            type="text"
+            placeholder="Prénom"
+            value={prenom}
+            onChange={(e) => setPrenom(e.target.value)}
+            className="w-full p-3 border border-gray-300 rounded-xl"
+            required
+          />
+          <input
+            type="email"
+            placeholder="Adresse email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="w-full p-3 border border-gray-300 rounded-xl"
+            required
+          />
+          <input
+            type="password"
+            placeholder="Mot de passe"
+            value={motdepasse}
+            onChange={(e) => setMotdepasse(e.target.value)}
+            className="w-full p-3 border border-gray-300 rounded-xl"
+            required
+          />
+          <button type="submit" className="w-full bg-indigo-600 text-white p-3 rounded-xl hover:bg-indigo-700 transition">S’inscrire</button>
+        </form>
+        {message && <p className="mt-4 text-sm text-center text-red-600">{message}</p>}
+      </div>
     </div>
   );
 }
+
+export default Register;
 
