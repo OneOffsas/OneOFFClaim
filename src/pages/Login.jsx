@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
 import './login.css';
-import { useNavigate } from 'react-router-dom';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../firebase';
 
-function Login() {
-  const navigate = useNavigate();
+function Login({ onLoginSuccess }) {
   const [email, setEmail] = useState('');
   const [motDePasse, setMotDePasse] = useState('');
   const [message, setMessage] = useState('');
@@ -14,43 +12,39 @@ function Login() {
     e.preventDefault();
     try {
       await signInWithEmailAndPassword(auth, email, motDePasse);
-      setMessage('✅ Connexion réussie ! Redirection...');
-      setTimeout(() => navigate('/dashboard'), 1500);
-    } catch (err) {
+      setMessage('✅ Connexion réussie !');
+      onLoginSuccess();
+    } catch (error) {
+      console.error(error);
       setMessage('❌ Email ou mot de passe incorrect.');
     }
   };
 
   return (
-    <div className="login-container">
-      <div className="login-box glass-effect">
-        <h2>🔐 Connexion</h2>
-        <form onSubmit={handleLogin}>
-          <input
-            type="email"
-            placeholder="Adresse e-mail"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-          <input
-            type="password"
-            placeholder="Mot de passe"
-            value={motDePasse}
-            onChange={(e) => setMotDePasse(e.target.value)}
-            required
-          />
-          <button type="submit">Se connecter</button>
-        </form>
+    <div className="auth-container">
+      <form className="auth-card" onSubmit={handleLogin}>
+        <h2>Connexion</h2>
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+        <input
+          type="password"
+          placeholder="Mot de passe"
+          value={motDePasse}
+          onChange={(e) => setMotDePasse(e.target.value)}
+          required
+        />
+        <button type="submit">Se connecter</button>
         <p className="message">{message}</p>
-        <p className="link">
-          Pas encore inscrit ? <a href="/register">Créer un compte</a>
-        </p>
-      </div>
+        <p className="link">Pas encore inscrit ? <a href="/register">Créer un compte</a></p>
+      </form>
     </div>
   );
 }
 
 export default Login;
-
 
