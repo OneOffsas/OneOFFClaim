@@ -1,49 +1,84 @@
-/* Même style que Login.css */
-.auth-container {
+.register-container {
   height: 100vh;
-  background: linear-gradient(135deg, #3F3D56, #6C63FF);
+  background: linear-gradient(to right, #4e54c8, #8f94fb);
   display: flex;
   justify-content: center;
   align-items: center;
+  font-family: "Segoe UI", sans-serif;
 }
 
-.form-box {
-  background: rgba(255, 255, 255, 0.2);
+.register-box {
+  background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(15px);
   padding: 40px;
-  border-radius: 15px;
-  box-shadow: 0 0 30px rgba(0,0,0,0.1);
+  border-radius: 20px;
+  box-shadow: 0 4px 40px rgba(0, 0, 0, 0.3);
+  width: 320px;
+  color: #fff;
   text-align: center;
-  width: 90%;
-  max-width: 400px;
+  animation: slideIn 0.5s ease;
 }
 
-.form-box h2 {
-  color: white;
+.register-box h2 {
   margin-bottom: 20px;
 }
 
-.form-box input {
-  display: block;
+.register-box input {
   width: 100%;
   padding: 12px;
   margin: 10px 0;
-  border-radius: 8px;
   border: none;
+  border-radius: 10px;
+  outline: none;
+  font-size: 16px;
 }
 
-.form-box button {
-  padding: 12px 20px;
-  background-color: #6C63FF;
+.register-box button {
+  width: 100%;
+  padding: 12px;
+  background-color: #ffffffcc;
+  color: #333;
   border: none;
-  color: white;
-  border-radius: 8px;
+  border-radius: 10px;
   font-weight: bold;
   cursor: pointer;
+  margin-top: 10px;
+  transition: all 0.3s ease;
 }
 
-.form-box p {
-  margin-top: 15px;
-  color: white;
+.register-box button:hover {
+  background-color: #fff;
+}
+
+.error {
+  color: #ff4d4f;
+  margin-top: 10px;
+}
+
+.success {
+  color: #4caf50;
+  margin-top: 10px;
+}
+
+.bottom-text {
+  margin-top: 20px;
+  font-size: 14px;
+  color: #ddd;
+}
+
+.bottom-text span {
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
