@@ -53,5 +53,9 @@ function Register() {
         </p>
       </div>
     </div>
- 
+  );
+}
+
+export default Register;
+
 
