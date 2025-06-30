@@ -1,36 +1,55 @@
-// src/pages/Login.jsx
 import React, { useState } from 'react';
-import './login.css';
-import { useNavigate } from 'react-router-dom';
-import { auth } from '../firebaseConfig';
 import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../firebaseConfig';
+import './auth.css';
+import { useNavigate } from 'react-router-dom';
 
-const Login = () => {
+function Login() {
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [motDePasse, setMotDePasse] = useState('');
+  const [message, setMessage] = useState('');
   const navigate = useNavigate();
 
-  const handleLogin = async () => {
+  const handleConnexion = async (e) => {
+    e.preventDefault();
     try {
-      await signInWithEmailAndPassword(auth, email, password);
-      alert("✅ Connexion réussie !");
+      await signInWithEmailAndPassword(auth, email, motDePasse);
+      setMessage('✅ Connexion réussie !');
       navigate('/dashboard');
     } catch (error) {
-      alert(`❌ Erreur : ${error.message}`);
+      setMessage('❌ Identifiants invalides.');
     }
   };
 
   return (
-    <div className="login-container">
-      <div className="login-card">
+    <div className="auth-container">
+      <div className="auth-box">
         <h2>Connexion</h2>
-        <input type="email" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} />
-        <input type="password" placeholder="Mot de passe" value={password} onChange={e => setPassword(e.target.value)} />
-        <button onClick={handleLogin}>Se connecter</button>
+        <form onSubmit={handleConnexion}>
+          <input
+            type="email"
+            placeholder="Adresse e-mail"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+          <input
+            type="password"
+            placeholder="Mot de passe"
+            value={motDePasse}
+            onChange={(e) => setMotDePasse(e.target.value)}
+            required
+          />
+          <button type="submit">Se connecter</button>
+        </form>
+        {message && <p className="message">{message}</p>}
+        <p className="link-text">
+          Pas encore de compte ? <a href="/register">Inscription</a>
+        </p>
       </div>
     </div>
   );
-};
+}
 
 export default Login;
 
