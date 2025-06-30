@@ -1,64 +1,69 @@
-.landing-container {
-  height: 100vh;
-  background: linear-gradient(135deg, #2c3e50, #3498db);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
+.landing {
+  font-family: 'Segoe UI', sans-serif;
+  color: #222;
+  background: linear-gradient(135deg, #ece9f5, #ffffff);
+  min-height: 100vh;
+}
+
+.landing-header {
+  padding: 1.5rem 2rem;
+  background-color: #5a2ff0;
   color: white;
-  font-family: 'Poppins', sans-serif;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.overlay {
-  position: absolute;
-  top: 0; left: 0;
-  height: 100%; width: 100%;
-  background: rgba(0, 0, 0, 0.4);
-  z-index: 0;
+.landing-header h1 {
+  font-size: 1.8rem;
 }
 
-.landing-content {
+.landing-header nav button {
+  margin-left: 1rem;
+  padding: 0.6rem 1.2rem;
+  font-weight: 500;
+  border: none;
+  border-radius: 6px;
+  background: white;
+  color: #5a2ff0;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.landing-header nav button:hover {
+  background: #ecebff;
+}
+
+.landing-hero {
   text-align: center;
-  z-index: 1;
+  padding: 5rem 2rem;
   max-width: 800px;
-  padding: 2rem;
+  margin: auto;
 }
 
-.landing-title {
-  font-size: 4rem;
-  margin-bottom: 1rem;
-  font-weight: 700;
+.landing-hero h2 {
+  font-size: 2.5rem;
+  color: #5a2ff0;
+  margin-bottom: 1.5rem;
 }
 
-.landing-subtitle {
-  font-size: 1.5rem;
+.landing-hero p {
+  font-size: 1.2rem;
+  color: #444;
   margin-bottom: 2rem;
 }
 
-.landing-buttons .btn {
-  margin: 0 1rem;
-  padding: 0.8rem 2rem;
-  border: none;
-  border-radius: 5px;
+.landing-hero button {
   font-size: 1rem;
-  text-decoration: none;
-  transition: 0.3s;
-  background-color: #ffffff;
-  color: #2c3e50;
-}
-
-.landing-buttons .btn:hover {
-  background-color: #f1f1f1;
-}
-
-.btn-secondary {
-  background-color: transparent;
-  border: 2px solid white;
+  background-color: #5a2ff0;
   color: white;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease;
 }
 
-.btn-secondary:hover {
-  background-color: white;
-  color: #2c3e50;
+.landing-hero button:hover {
+  background-color: #7b4df9;
 }
-
