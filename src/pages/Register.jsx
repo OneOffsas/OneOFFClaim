@@ -1,54 +1,44 @@
 import React, { useState } from 'react';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../firebaseConfig';
-import './auth.css';
 import { useNavigate } from 'react-router-dom';
+import './register.css';
 
-function Register() {
+export default function Register() {
   const [email, setEmail] = useState('');
-  const [motDePasse, setMotDePasse] = useState('');
-  const [message, setMessage] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirm, setConfirm] = useState('');
+  const [errorMsg, setErrorMsg] = useState('');
+  const [successMsg, setSuccessMsg] = useState('');
   const navigate = useNavigate();
 
-  const handleInscription = async (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
+    if (password !== confirm) {
+      setErrorMsg('❌ Les mots de passe ne correspondent pas.');
+      return;
+    }
     try {
-      await createUserWithEmailAndPassword(auth, email, motDePasse);
-      setMessage('✅ Inscription réussie !');
-      navigate('/dashboard');
+      await createUserWithEmailAndPassword(auth, email, password);
+      setSuccessMsg('✅ Inscription réussie. Redirection...');
+      setTimeout(() => navigate('/dashboard'), 1500);
     } catch (error) {
-      setMessage("❌ Erreur lors de l'inscription.");
+      setErrorMsg('❌ Une erreur est survenue.');
     }
   };
 
   return (
     <div className="auth-container">
-      <div className="auth-box">
-        <h2>Inscription</h2>
-        <form onSubmit={handleInscription}>
-          <input
-            type="email"
-            placeholder="Adresse e-mail"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-          <input
-            type="password"
-            placeholder="Mot de passe"
-            value={motDePasse}
-            onChange={(e) => setMotDePasse(e.target.value)}
-            required
-          />
-          <button type="submit">S'inscrire</button>
-        </form>
-        {message && <p className="message">{message}</p>}
-        <p className="link-text">
-          Déjà inscrit ? <a href="/login">Connexion</a>
-        </p>
-      </div>
+      <h2>Inscription</h2>
+      <form onSubmit={handleRegister}>
+        <input type="email" placeholder="Email" onChange={(e) => setEmail(e.target.value)} required />
+        <input type="password" placeholder="Mot de passe" onChange={(e) => setPassword(e.target.value)} required />
+        <input type="password" placeholder="Confirmer mot de passe" onChange={(e) => setConfirm(e.target.value)} required />
+        <button type="submit">S'inscrire</button>
+        {errorMsg && <p className="error">{errorMsg}</p>}
+        {successMsg && <p className="success">{successMsg}</p>}
+      </form>
     </div>
   );
 }
 
-export default Register;
