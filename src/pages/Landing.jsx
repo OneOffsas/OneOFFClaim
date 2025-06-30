@@ -1,25 +1,20 @@
 import React from 'react';
-import './landing.css';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import './Landing.css';
 
 function Landing() {
-  const navigate = useNavigate();
-
   return (
     <div className="landing">
-      <header className="landing-header">
-        <h1>ClaimOneOff</h1>
-        <nav>
-          <button onClick={() => navigate('/login')}>Connexion</button>
-          <button onClick={() => navigate('/register')}>Inscription</button>
-        </nav>
-      </header>
-
-      <section className="landing-hero">
-        <h2>La solution SaaS ultime pour gérer vos litiges logistiques</h2>
-        <p>Centralisez les réclamations, suivez les performances, automatisez vos process, et offrez une expérience client exceptionnelle.</p>
-        <button onClick={() => navigate('/register')}>Commencer maintenant</button>
-      </section>
+      <div className="overlay">
+        <div className="landing-content">
+          <h1>🚀 ClaimOneOff</h1>
+          <p>Votre plateforme SaaS pour la gestion logistique e-commerce de nouvelle génération.</p>
+          <div className="landing-buttons">
+            <Link to="/login"><button>Connexion</button></Link>
+            <Link to="/register"><button className="btn-secondary">Créer un compte</button></Link>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
