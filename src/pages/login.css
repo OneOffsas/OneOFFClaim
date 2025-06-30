@@ -1,80 +1,37 @@
-/* src/pages/login.css */
-body {
-  margin: 0;
-  font-family: 'Poppins', sans-serif;
-  background: linear-gradient(135deg, #2e2e8f, #4b0082, #1f1f3b);
-  background-size: 400% 400%;
-  animation: gradient 15s ease infinite;
-  height: 100vh;
-}
-
 .login-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
   height: 100vh;
+  background: linear-gradient(135deg, #1e3c72, #2a5298);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Poppins', sans-serif;
 }
 
-.login-card {
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(12px);
-  border-radius: 16px;
-  padding: 40px;
+.login-form {
+  background: white;
+  padding: 2rem;
+  border-radius: 15px;
+  box-shadow: 0 15px 30px rgba(0,0,0,0.2);
   width: 100%;
   max-width: 400px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
   text-align: center;
+}
+
+.login-form h2 {
+  margin-bottom: 1.5rem;
+}
+
+.login-form input {
+  width: 100%;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  font-size: 1rem;
+}
+
+.login-form button {
+  background-color: #3498db;
   color: white;
-}
+  padding:
 
-.login-card h2 {
-  margin-bottom: 20px;
-}
-
-.login-card input {
-  width: 100%;
-  padding: 12px;
-  margin: 12px 0;
-  border: none;
-  border-radius: 8px;
-  font-size: 16px;
-  outline: none;
-}
-
-.login-card button {
-  width: 100%;
-  padding: 12px;
-  background: #ffffff;
-  color: #1f1f3b;
-  font-weight: bold;
-  font-size: 16px;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: 0.3s ease;
-}
-
-.login-card button:hover {
-  background: #e0e0e0;
-}
-
-.message {
-  margin-top: 10px;
-  font-weight: bold;
-}
-
-.inscription-lien {
-  margin-top: 20px;
-  font-size: 14px;
-}
-
-.inscription-lien a {
-  color: #fff;
-  text-decoration: underline;
-}
-
-@keyframes gradient {
-  0% {background-position: 0% 50%;}
-  50% {background-position: 100% 50%;}
-  100% {background-position: 0% 50%;}
-}
