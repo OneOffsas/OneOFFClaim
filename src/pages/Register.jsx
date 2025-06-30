@@ -1,37 +1,54 @@
-// src/pages/Register.jsx
 import React, { useState } from 'react';
-import './register.css';
-import { useNavigate } from 'react-router-dom';
-import { auth } from '../firebaseConfig';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../firebaseConfig';
+import './auth.css';
+import { useNavigate } from 'react-router-dom';
 
-const Register = () => {
+function Register() {
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [motDePasse, setMotDePasse] = useState('');
+  const [message, setMessage] = useState('');
   const navigate = useNavigate();
 
-  const handleRegister = async () => {
+  const handleInscription = async (e) => {
+    e.preventDefault();
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
-      alert("✅ Compte créé avec succès !");
-      navigate('/login');
+      await createUserWithEmailAndPassword(auth, email, motDePasse);
+      setMessage('✅ Inscription réussie !');
+      navigate('/dashboard');
     } catch (error) {
-      alert(`❌ Erreur : ${error.message}`);
+      setMessage("❌ Erreur lors de l'inscription.");
     }
   };
 
   return (
-    <div className="register-container">
-      <div className="register-card">
-        <h2>Créer un compte</h2>
-        <input type="email" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} />
-        <input type="password" placeholder="Mot de passe" value={password} onChange={e => setPassword(e.target.value)} />
-        <button onClick={handleRegister}>S'inscrire</button>
+    <div className="auth-container">
+      <div className="auth-box">
+        <h2>Inscription</h2>
+        <form onSubmit={handleInscription}>
+          <input
+            type="email"
+            placeholder="Adresse e-mail"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+          <input
+            type="password"
+            placeholder="Mot de passe"
+            value={motDePasse}
+            onChange={(e) => setMotDePasse(e.target.value)}
+            required
+          />
+          <button type="submit">S'inscrire</button>
+        </form>
+        {message && <p className="message">{message}</p>}
+        <p className="link-text">
+          Déjà inscrit ? <a href="/login">Connexion</a>
+        </p>
       </div>
     </div>
   );
-};
+}
 
 export default Register;
-
-
