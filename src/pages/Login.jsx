@@ -1,36 +1,37 @@
 import React, { useState } from 'react';
-import './Login.css';
+import { useNavigate } from 'react-router-dom';
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../firebase';
+import { auth } from '../firebaseConfig';
+import './Login.css';
 
-const Login = () => {
+function Login() {
   const [email, setEmail] = useState('');
-  const [motDePasse, setMotDePasse] = useState('');
-  const [message, setMessage] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
 
-  const handleConnexion = async (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      await signInWithEmailAndPassword(auth, email, motDePasse);
-      setMessage('Connexion réussie ! 🎉');
-      window.location.href = '/dashboard';
-    } catch (error) {
-      setMessage("❌ Email ou mot de passe incorrect.");
+      await signInWithEmailAndPassword(auth, email, password);
+      navigate('/dashboard');
+    } catch (err) {
+      setError("❌ Identifiants incorrects");
     }
   };
 
   return (
-    <div className="login-container">
-      <form onSubmit={handleConnexion} className="login-form">
+    <div className="auth-container login">
+      <form className="auth-form" onSubmit={handleLogin}>
         <h2>Connexion</h2>
-        <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-        <input type="password" placeholder="Mot de passe" value={motDePasse} onChange={(e) => setMotDePasse(e.target.value)} required />
+        {error && <div className="error">{error}</div>}
+        <input type="email" placeholder="Email" onChange={(e) => setEmail(e.target.value)} required />
+        <input type="password" placeholder="Mot de passe" onChange={(e) => setPassword(e.target.value)} required />
         <button type="submit">Se connecter</button>
-        {message && <p className="message">{message}</p>}
-        <p className="redirect">Pas encore de compte ? <a href="/register">Inscription</a></p>
       </form>
     </div>
   );
-};
+}
 
 export default Login;
+
