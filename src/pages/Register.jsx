@@ -1,6 +1,9 @@
+// src/pages/Register.jsx
 import React, { useState } from 'react';
 import './register.css';
 import { useNavigate } from 'react-router-dom';
+import { auth } from '../firebaseConfig';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
 
 const Register = () => {
   const [email, setEmail] = useState('');
@@ -9,11 +12,11 @@ const Register = () => {
 
   const handleRegister = async () => {
     try {
-      // Ici tu ajoutes ta logique Firebase Auth
-      alert("✅ Compte créé !");
+      await createUserWithEmailAndPassword(auth, email, password);
+      alert("✅ Compte créé avec succès !");
       navigate('/login');
     } catch (error) {
-      alert("❌ Erreur d'inscription");
+      alert(`❌ Erreur : ${error.message}`);
     }
   };
 
@@ -30,4 +33,5 @@ const Register = () => {
 };
 
 export default Register;
+
 
