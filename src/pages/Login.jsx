@@ -1,44 +1,33 @@
+// src/pages/Login.jsx
 import React, { useState } from 'react';
 import './login.css';
+import { useNavigate } from 'react-router-dom';
+import { auth } from '../firebaseConfig';
+import { signInWithEmailAndPassword } from 'firebase/auth';
 
 const Login = () => {
   const [email, setEmail] = useState('');
-  const [motDePasse, setMotDePasse] = useState('');
-  const [message, setMessage] = useState('');
+  const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    setMessage('Connexion en cours...');
-
+  const handleLogin = async () => {
     try {
-      // Ajoute ici l’appel à Firebase Auth
-      setMessage('✅ Connexion réussie');
+      await signInWithEmailAndPassword(auth, email, password);
+      alert("✅ Connexion réussie !");
+      navigate('/dashboard');
     } catch (error) {
-      setMessage('❌ Connexion échouée');
+      alert(`❌ Erreur : ${error.message}`);
     }
   };
 
   return (
     <div className="login-container">
-      <form className="login-form" onSubmit={handleLogin}>
+      <div className="login-card">
         <h2>Connexion</h2>
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          required
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <input
-          type="password"
-          placeholder="Mot de passe"
-          value={motDePasse}
-          required
-          onChange={(e) => setMotDePasse(e.target.value)}
-        />
-        <button type="submit">Se connecter</button>
-        <p className="login-message">{message}</p>
-      </form>
+        <input type="email" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} />
+        <input type="password" placeholder="Mot de passe" value={password} onChange={e => setPassword(e.target.value)} />
+        <button onClick={handleLogin}>Se connecter</button>
+      </div>
     </div>
   );
 };
