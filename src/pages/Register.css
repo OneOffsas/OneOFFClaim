@@ -1,84 +1,78 @@
+/* src/pages/Register.css */
 .register-container {
   height: 100vh;
-  background: linear-gradient(to right, #4e54c8, #8f94fb);
+  background: linear-gradient(135deg, #667eea, #764ba2);
   display: flex;
-  justify-content: center;
   align-items: center;
-  font-family: "Segoe UI", sans-serif;
+  justify-content: center;
+  animation: fadeIn 1.5s ease;
 }
 
-.register-box {
+.register-form {
   background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(15px);
-  padding: 40px;
+  padding: 50px;
   border-radius: 20px;
-  box-shadow: 0 4px 40px rgba(0, 0, 0, 0.3);
-  width: 320px;
-  color: #fff;
+  backdrop-filter: blur(15px);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
   text-align: center;
-  animation: slideIn 0.5s ease;
+  width: 350px;
+  color: white;
 }
 
-.register-box h2 {
-  margin-bottom: 20px;
+.register-form h2 {
+  margin-bottom: 25px;
+  font-size: 28px;
+  color: #ffffff;
 }
 
-.register-box input {
+.register-form input {
   width: 100%;
   padding: 12px;
-  margin: 10px 0;
-  border: none;
+  margin: 12px 0;
   border-radius: 10px;
-  outline: none;
-  font-size: 16px;
+  border: none;
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  font-size: 15px;
 }
 
-.register-box button {
+.register-form input::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.register-form button {
   width: 100%;
   padding: 12px;
-  background-color: #ffffffcc;
-  color: #333;
-  border: none;
-  border-radius: 10px;
+  background: #00c6ff;
+  color: white;
   font-weight: bold;
+  border: none;
+  border-radius: 10px;
   cursor: pointer;
-  margin-top: 10px;
-  transition: all 0.3s ease;
+  margin-top: 15px;
+  transition: background 0.3s ease;
 }
 
-.register-box button:hover {
-  background-color: #fff;
+.register-form button:hover {
+  background: #0072ff;
 }
 
-.error {
-  color: #ff4d4f;
-  margin-top: 10px;
-}
-
-.success {
-  color: #4caf50;
-  margin-top: 10px;
-}
-
-.bottom-text {
-  margin-top: 20px;
+.register-form .message {
+  margin-top: 15px;
   font-size: 14px;
-  color: #ddd;
+  color: #fff;
 }
 
-.bottom-text span {
+.register-form .back {
+  margin-top: 10px;
   cursor: pointer;
+  font-size: 14px;
+  color: #e0e0e0;
   text-decoration: underline;
 }
 
-@keyframes slideIn {
-  from {
-    opacity: 0;
-    transform: translateY(40px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
