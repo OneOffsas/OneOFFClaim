@@ -1,84 +1,32 @@
-.register-container {
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: linear-gradient(135deg, #1f1c2c, #928dab);
-  background-size: 400% 400%;
-  animation: gradientMove 12s ease infinite;
-  font-family: 'Segoe UI', sans-serif;
-}
+import React, { useState } from 'react';
+import './register.css';
+import { useNavigate } from 'react-router-dom';
 
-@keyframes gradientMove {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
+const Register = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
-.register-box {
-  width: 400px;
-  padding: 45px;
-  border-radius: 20px;
-  backdrop-filter: blur(18px);
-  background: rgba(255, 255, 255, 0.12);
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.25);
-  color: white;
-  text-align: center;
-}
+  const handleRegister = async () => {
+    try {
+      // Ici tu ajoutes ta logique Firebase Auth
+      alert("✅ Compte créé !");
+      navigate('/login');
+    } catch (error) {
+      alert("❌ Erreur d'inscription");
+    }
+  };
 
-.register-box h2 {
-  margin-bottom: 20px;
-  font-size: 26px;
-  letter-spacing: 1px;
-}
+  return (
+    <div className="register-container">
+      <div className="register-card">
+        <h2>Créer un compte</h2>
+        <input type="email" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} />
+        <input type="password" placeholder="Mot de passe" value={password} onChange={e => setPassword(e.target.value)} />
+        <button onClick={handleRegister}>S'inscrire</button>
+      </div>
+    </div>
+  );
+};
 
-.register-box form input {
-  width: 100%;
-  padding: 14px;
-  margin: 12px 0;
-  border: none;
-  border-radius: 10px;
-  background: rgba(255, 255, 255, 0.2);
-  color: white;
-  font-size: 14px;
-  outline: none;
-}
-
-.register-box form input::placeholder {
-  color: #e0e0e0;
-}
-
-.register-box button {
-  width: 100%;
-  padding: 12px;
-  border: none;
-  border-radius: 10px;
-  background-color: #7f53ac;
-  color: white;
-  font-weight: bold;
-  margin-top: 10px;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.register-box button:hover {
-  background-color: #5e3a99;
-}
-
-.register-box .message {
-  margin-top: 10px;
-  font-size: 14px;
-  color: #ffcccb;
-}
-
-.register-box .link {
-  margin-top: 15px;
-  font-size: 13px;
-  color: #d0d0d0;
-}
-
-.register-box .link a {
-  color: #ffffff;
-  text-decoration: underline;
-}
+export default Register;
