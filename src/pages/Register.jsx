@@ -1,39 +1,43 @@
 import React, { useState } from 'react';
-import './Register.css';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../firebase';
+import { useNavigate } from 'react-router-dom';
+import { auth } from '../firebaseConfig';
+import './Register.css';
 
-const Register = () => {
+function Register() {
   const [email, setEmail] = useState('');
-  const [motDePasse, setMotDePasse] = useState('');
-  const [message, setMessage] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmation, setConfirmation] = useState('');
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
 
-  const handleInscription = async (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
+    if (password !== confirmation) {
+      setError("Les mots de passe ne correspondent pas");
+      return;
+    }
     try {
-      await createUserWithEmailAndPassword(auth, email, motDePasse);
-      setMessage('✅ Inscription réussie !');
-      setTimeout(() => {
-        window.location.href = '/dashboard';
-      }, 1500);
-    } catch (error) {
-      setMessage("❌ Erreur lors de l'inscription.");
+      await createUserWithEmailAndPassword(auth, email, password);
+      navigate('/dashboard');
+    } catch (err) {
+      setError("❌ Erreur : " + err.message);
     }
   };
 
   return (
-    <div className="register-container">
-      <form onSubmit={handleInscription} className="register-form">
+    <div className="auth-container register">
+      <form className="auth-form" onSubmit={handleRegister}>
         <h2>Créer un compte</h2>
-        <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-        <input type="password" placeholder="Mot de passe" value={motDePasse} onChange={(e) => setMotDePasse(e.target.value)} required />
+        {error && <div className="error">{error}</div>}
+        <input type="email" placeholder="Email" onChange={(e) => setEmail(e.target.value)} required />
+        <input type="password" placeholder="Mot de passe" onChange={(e) => setPassword(e.target.value)} required />
+        <input type="password" placeholder="Confirmer le mot de passe" onChange={(e) => setConfirmation(e.target.value)} required />
         <button type="submit">S'inscrire</button>
-        {message && <p className="message">{message}</p>}
-        <p className="redirect">Déjà inscrit ? <a href="/login">Connexion</a></p>
       </form>
     </div>
   );
-};
+}
 
 export default Register;
 
