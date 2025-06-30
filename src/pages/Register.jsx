@@ -1,43 +1,36 @@
-import React, { useState } from 'react';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { useNavigate } from 'react-router-dom';
-import { auth } from '../firebaseConfig';
-import './Register.css';
+import React, { useState } from "react";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../firebaseConfig";
+import { useNavigate } from "react-router-dom";
+import "./Register.css";
 
 function Register() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmation, setConfirmation] = useState('');
-  const [error, setError] = useState('');
+  const [email, setEmail] = useState("");
+  const [motDePasse, setMotDePasse] = useState("");
+  const [message, setMessage] = useState("");
   const navigate = useNavigate();
 
-  const handleRegister = async (e) => {
-    e.preventDefault();
-    if (password !== confirmation) {
-      setError("Les mots de passe ne correspondent pas");
-      return;
-    }
+  const handleRegister = async () => {
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
-      navigate('/dashboard');
-    } catch (err) {
-      setError("❌ Erreur : " + err.message);
+      await createUserWithEmailAndPassword(auth, email, motDePasse);
+      setMessage("✅ Inscription réussie !");
+      navigate("/dashboard");
+    } catch (error) {
+      setMessage("❌ Erreur : " + error.message);
     }
   };
 
   return (
-    <div className="auth-container register">
-      <form className="auth-form" onSubmit={handleRegister}>
-        <h2>Créer un compte</h2>
-        {error && <div className="error">{error}</div>}
-        <input type="email" placeholder="Email" onChange={(e) => setEmail(e.target.value)} required />
-        <input type="password" placeholder="Mot de passe" onChange={(e) => setPassword(e.target.value)} required />
-        <input type="password" placeholder="Confirmer le mot de passe" onChange={(e) => setConfirmation(e.target.value)} required />
-        <button type="submit">S'inscrire</button>
-      </form>
+    <div className="auth-container">
+      <div className="form-box">
+        <h2>Inscription</h2>
+        <input type="email" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} />
+        <input type="password" placeholder="Mot de passe" value={motDePasse} onChange={e => setMotDePasse(e.target.value)} />
+        <button onClick={handleRegister}>Créer un compte</button>
+        {message && <p>{message}</p>}
+      </div>
     </div>
   );
 }
 
 export default Register;
-
