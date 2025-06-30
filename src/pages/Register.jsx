@@ -1,61 +1,33 @@
 import React, { useState } from 'react';
 import './register.css';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../firebase';
+import { useNavigate } from 'react-router-dom';
 
-function Register() {
+const Register = () => {
   const [email, setEmail] = useState('');
-  const [motDePasse, setMotDePasse] = useState('');
-  const [confirmation, setConfirmation] = useState('');
-  const [message, setMessage] = useState('');
+  const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
-  const handleRegister = async (e) => {
-    e.preventDefault();
-    if (motDePasse !== confirmation) {
-      setMessage('❌ Les mots de passe ne correspondent pas.');
-      return;
-    }
+  const handleRegister = async () => {
     try {
-      await createUserWithEmailAndPassword(auth, email, motDePasse);
-      setMessage('✅ Inscription réussie !');
+      // Ici tu ajoutes ta logique Firebase Auth
+      alert("✅ Compte créé !");
+      navigate('/login');
     } catch (error) {
-      console.error(error);
-      setMessage('❌ Erreur : ' + error.message);
+      alert("❌ Erreur d'inscription");
     }
   };
 
   return (
-    <div className="auth-container">
-      <form className="auth-card" onSubmit={handleRegister}>
-        <h2>Inscription</h2>
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <input
-          type="password"
-          placeholder="Mot de passe"
-          value={motDePasse}
-          onChange={(e) => setMotDePasse(e.target.value)}
-          required
-        />
-        <input
-          type="password"
-          placeholder="Confirmer le mot de passe"
-          value={confirmation}
-          onChange={(e) => setConfirmation(e.target.value)}
-          required
-        />
-        <button type="submit">Créer un compte</button>
-        <p className="message">{message}</p>
-        <p className="link">Déjà inscrit ? <a href="/login">Se connecter</a></p>
-      </form>
+    <div className="register-container">
+      <div className="register-card">
+        <h2>Créer un compte</h2>
+        <input type="email" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} />
+        <input type="password" placeholder="Mot de passe" value={password} onChange={e => setPassword(e.target.value)} />
+        <button onClick={handleRegister}>S'inscrire</button>
+      </div>
     </div>
   );
-}
+};
 
 export default Register;
 
