@@ -1,27 +1,27 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
-import "./Landing.css";
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import './Landing.css';
 
-function Landing() {
+const Landing = () => {
   const navigate = useNavigate();
 
   return (
     <div className="landing-container">
-      <div className="overlay">
-        <div className="content">
-          <h1 className="fade-in">ClaimOneOff</h1>
-          <p className="fade-in delay-1">
-            La plateforme intelligente pour gérer tous vos litiges logistiques e-commerce en un seul endroit.
-          </p>
-          <div className="buttons fade-in delay-2">
-            <button onClick={() => navigate("/register")}>S'inscrire</button>
-            <button onClick={() => navigate("/login")}>Se connecter</button>
-            <button onClick={() => navigate("/reset-password")}>Mot de passe oublié</button>
-          </div>
+      <div className="glass-box">
+        <h1 className="main-title">ClaimOneOff</h1>
+        <p className="subtitle">Révolutionnez la gestion de vos litiges logistiques e-commerce.</p>
+        <p className="description">
+          Notre solution vous permet d'automatiser, suivre et résoudre efficacement vos réclamations transporteurs,
+          tout en vous offrant une interface intuitive et des statistiques puissantes.
+        </p>
+        <div className="button-group">
+          <button onClick={() => navigate('/register')} className="btn">S'inscrire</button>
+          <button onClick={() => navigate('/login')} className="btn btn-secondary">Se connecter</button>
+          <button onClick={() => navigate('/forgot-password')} className="btn btn-link">Mot de passe oublié</button>
         </div>
       </div>
     </div>
   );
-}
+};
 
 export default Landing;
