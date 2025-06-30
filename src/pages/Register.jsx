@@ -1,44 +1,39 @@
 import React, { useState } from 'react';
+import './Register.css';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../firebaseConfig';
-import { useNavigate } from 'react-router-dom';
-import './register.css';
+import { auth } from '../firebase';
 
-export default function Register() {
+const Register = () => {
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirm, setConfirm] = useState('');
-  const [errorMsg, setErrorMsg] = useState('');
-  const [successMsg, setSuccessMsg] = useState('');
-  const navigate = useNavigate();
+  const [motDePasse, setMotDePasse] = useState('');
+  const [message, setMessage] = useState('');
 
-  const handleRegister = async (e) => {
+  const handleInscription = async (e) => {
     e.preventDefault();
-    if (password !== confirm) {
-      setErrorMsg('❌ Les mots de passe ne correspondent pas.');
-      return;
-    }
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
-      setSuccessMsg('✅ Inscription réussie. Redirection...');
-      setTimeout(() => navigate('/dashboard'), 1500);
+      await createUserWithEmailAndPassword(auth, email, motDePasse);
+      setMessage('✅ Inscription réussie !');
+      setTimeout(() => {
+        window.location.href = '/dashboard';
+      }, 1500);
     } catch (error) {
-      setErrorMsg('❌ Une erreur est survenue.');
+      setMessage("❌ Erreur lors de l'inscription.");
     }
   };
 
   return (
-    <div className="auth-container">
-      <h2>Inscription</h2>
-      <form onSubmit={handleRegister}>
-        <input type="email" placeholder="Email" onChange={(e) => setEmail(e.target.value)} required />
-        <input type="password" placeholder="Mot de passe" onChange={(e) => setPassword(e.target.value)} required />
-        <input type="password" placeholder="Confirmer mot de passe" onChange={(e) => setConfirm(e.target.value)} required />
+    <div className="register-container">
+      <form onSubmit={handleInscription} className="register-form">
+        <h2>Créer un compte</h2>
+        <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+        <input type="password" placeholder="Mot de passe" value={motDePasse} onChange={(e) => setMotDePasse(e.target.value)} required />
         <button type="submit">S'inscrire</button>
-        {errorMsg && <p className="error">{errorMsg}</p>}
-        {successMsg && <p className="success">{successMsg}</p>}
+        {message && <p className="message">{message}</p>}
+        <p className="redirect">Déjà inscrit ? <a href="/login">Connexion</a></p>
       </form>
     </div>
   );
-}
+};
+
+export default Register;
 
