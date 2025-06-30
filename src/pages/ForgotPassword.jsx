@@ -1,79 +1,44 @@
-/* ForgotPassword.css */
+// src/pages/ForgotPassword.jsx
+import React, { useState } from 'react';
+import { sendPasswordResetEmail } from 'firebase/auth';
+import { auth } from '../firebaseConfig';
+import './ForgotPassword.css';
+import { useNavigate } from 'react-router-dom';
 
-.forgot-password-container {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(135deg, #5a189a, #1e3a8a);
-  font-family: 'Segoe UI', sans-serif;
-  padding: 20px;
-}
+const ForgotPassword = () => {
+  const [email, setEmail] = useState('');
+  const [message, setMessage] = useState('');
+  const navigate = useNavigate();
 
-.forgot-password-form {
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(16px);
-  border-radius: 20px;
-  padding: 40px;
-  max-width: 400px;
-  width: 100%;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
-  color: #fff;
-  text-align: center;
-}
+  const handleReset = async (e) => {
+    e.preventDefault();
+    try {
+      await sendPasswordResetEmail(auth, email);
+      setMessage('📬 Un email de réinitialisation a été envoyé.');
+    } catch (err) {
+      setMessage('❌ Erreur : ' + err.message);
+    }
+  };
 
-.forgot-password-form h2 {
-  font-size: 1.8rem;
-  margin-bottom: 20px;
-}
+  return (
+    <div className="forgot-container">
+      <div className="forgot-box">
+        <h2>Mot de passe oublié ?</h2>
+        {message && <p className="message">{message}</p>}
+        <form onSubmit={handleReset}>
+          <input
+            type="email"
+            placeholder="Entrez votre email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+          <button type="submit">Envoyer</button>
+        </form>
+        <p><span onClick={() => navigate('/login')}>⬅ Retour à la connexion</span></p>
+      </div>
+    </div>
+  );
+};
 
-.forgot-password-form input {
-  width: 100%;
-  padding: 12px;
-  margin: 15px 0;
-  border: none;
-  border-radius: 10px;
-  background: rgba(255, 255, 255, 0.2);
-  color: #fff;
-  font-size: 1rem;
-}
-
-.forgot-password-form input::placeholder {
-  color: rgba(255, 255, 255, 0.7);
-}
-
-.forgot-password-form button {
-  width: 100%;
-  padding: 12px;
-  background-color: #4cc9f0;
-  color: #000;
-  border: none;
-  border-radius: 10px;
-  font-weight: bold;
-  font-size: 1rem;
-  margin-top: 10px;
-  cursor: pointer;
-  transition: background 0.3s ease;
-}
-
-.forgot-password-form button:hover {
-  background-color: #3a86ff;
-  color: #fff;
-}
-
-.success-message,
-.error-message {
-  margin-top: 15px;
-  font-size: 0.95rem;
-  color: #90ffcc;
-}
-
-.link {
-  margin-top: 15px;
-  color: #ffffff;
-  font-size: 0.9rem;
-  cursor: pointer;
-  display: block;
-  text-decoration: underline;
-}
-
+export default ForgotPassword;
