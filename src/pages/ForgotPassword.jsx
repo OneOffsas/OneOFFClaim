@@ -1,44 +1,46 @@
-// src/pages/ForgotPassword.jsx
 import React, { useState } from 'react';
+import './ForgotPassword.css';
 import { sendPasswordResetEmail } from 'firebase/auth';
 import { auth } from '../firebaseConfig';
-import './ForgotPassword.css';
 import { useNavigate } from 'react-router-dom';
 
-const ForgotPassword = () => {
+function ForgotPassword() {
   const [email, setEmail] = useState('');
-  const [message, setMessage] = useState('');
+  const [status, setStatus] = useState('');
   const navigate = useNavigate();
 
   const handleReset = async (e) => {
     e.preventDefault();
+    setStatus('Envoi en cours...');
+
     try {
       await sendPasswordResetEmail(auth, email);
-      setMessage('📬 Un email de réinitialisation a été envoyé.');
-    } catch (err) {
-      setMessage('❌ Erreur : ' + err.message);
+      setStatus('✅ Email envoyé avec succès !');
+    } catch (error) {
+      console.error(error.message);
+      setStatus("❌ Erreur : " + error.message);
     }
   };
 
   return (
     <div className="forgot-container">
       <div className="forgot-box">
-        <h2>Mot de passe oublié ?</h2>
-        {message && <p className="message">{message}</p>}
+        <h2>🔒 Mot de passe oublié</h2>
         <form onSubmit={handleReset}>
           <input
             type="email"
-            placeholder="Entrez votre email"
+            placeholder="Adresse e-mail"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
           />
-          <button type="submit">Envoyer</button>
+          <button type="submit">Réinitialiser le mot de passe</button>
+          <p className="status-message">{status}</p>
         </form>
-        <p><span onClick={() => navigate('/login')}>⬅ Retour à la connexion</span></p>
+        <button className="back-btn" onClick={() => navigate('/')}>⬅ Retour à l'accueil</button>
       </div>
     </div>
   );
-};
+}
 
 export default ForgotPassword;
