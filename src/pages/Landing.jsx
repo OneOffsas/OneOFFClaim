@@ -1,25 +1,27 @@
-// src/pages/Landing.jsx
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import "./Landing.css";
 
-const Landing = () => {
+function Landing() {
   const navigate = useNavigate();
 
   return (
     <div className="landing-container">
-      <div className="landing-overlay">
-        <div className="landing-content">
-          <h1>ClaimOneOff</h1>
-          <p>La solution moderne pour gérer vos litiges logistiques e-commerce, simplement, efficacement, et sans friction.</p>
-          <div className="landing-buttons">
-            <button onClick={() => navigate("/register")}>Créer un compte</button>
-            <button onClick={() => navigate("/login")} className="secondary-btn">Se connecter</button>
+      <div className="overlay">
+        <div className="content">
+          <h1 className="fade-in">ClaimOneOff</h1>
+          <p className="fade-in delay-1">
+            La plateforme intelligente pour gérer tous vos litiges logistiques e-commerce en un seul endroit.
+          </p>
+          <div className="buttons fade-in delay-2">
+            <button onClick={() => navigate("/register")}>S'inscrire</button>
+            <button onClick={() => navigate("/login")}>Se connecter</button>
+            <button onClick={() => navigate("/reset-password")}>Mot de passe oublié</button>
           </div>
         </div>
       </div>
     </div>
   );
-};
+}
 
 export default Landing;
