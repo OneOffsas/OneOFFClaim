@@ -1,59 +1,77 @@
+/* src/pages/Login.css */
 .login-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
   height: 100vh;
-  background: linear-gradient(to right, #667eea, #764ba2);
+  background: linear-gradient(135deg, #1d4350, #a43931);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 1.5s ease;
 }
 
-.login-glass {
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(10px);
-  padding: 40px;
+.login-form {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 50px;
   border-radius: 20px;
-  color: white;
-  box-shadow: 0 0 15px rgba(0,0,0,0.2);
-  width: 350px;
+  backdrop-filter: blur(15px);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
   text-align: center;
+  width: 350px;
+  color: white;
 }
 
-.login-glass h2 {
-  margin-bottom: 20px;
+.login-form h2 {
+  margin-bottom: 25px;
+  font-size: 28px;
+  color: #ffffff;
 }
 
-.login-glass input {
+.login-form input {
   width: 100%;
   padding: 12px;
-  margin: 10px 0;
+  margin: 12px 0;
+  border-radius: 10px;
   border: none;
-  border-radius: 8px;
-  outline: none;
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  font-size: 15px;
 }
 
-.login-glass button {
-  background: white;
-  color: #4b4b4b;
+.login-form input::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.login-form button {
+  width: 100%;
+  padding: 12px;
+  background: #ff4b2b;
+  color: white;
   font-weight: bold;
   border: none;
-  padding: 12px 24px;
-  border-radius: 8px;
+  border-radius: 10px;
   cursor: pointer;
-  width: 100%;
+  margin-top: 15px;
+  transition: background 0.3s ease;
 }
 
-.login-links {
-  margin-top: 15px;
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.9rem;
+.login-form button:hover {
+  background: #ff416c;
 }
-.login-links a {
+
+.login-form .message,
+.login-form .link,
+.login-form .back {
+  margin-top: 15px;
+  font-size: 14px;
   color: #fff;
+}
+
+.login-form .link,
+.login-form .back {
+  cursor: pointer;
   text-decoration: underline;
 }
-.error {
-  background: rgba(255, 0, 0, 0.2);
-  padding: 8px;
-  margin-bottom: 10px;
-  border-radius: 8px;
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
 }
