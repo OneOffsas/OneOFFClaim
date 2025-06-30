@@ -1,52 +1,71 @@
+/* src/pages/Landing.css */
 body, html {
   margin: 0;
   padding: 0;
-  font-family: 'Segoe UI', sans-serif;
-  background: linear-gradient(to right, #667eea, #764ba2);
   height: 100%;
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(120deg, #0f2027, #203a43, #2c5364);
+  overflow: hidden;
 }
 
 .landing-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
   height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 1.5s ease-in;
 }
 
-.landing-glass {
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(12px);
-  border-radius: 20px;
-  padding: 40px;
+.glass-box {
+  background: rgba(255, 255, 255, 0.12);
+  padding: 60px;
+  border-radius: 15px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.37);
   text-align: center;
   color: white;
-  box-shadow: 0 0 15px rgba(0,0,0,0.2);
-  max-width: 500px;
+  max-width: 600px;
 }
 
-.landing-glass h1 {
-  font-size: 3rem;
-  margin-bottom: 10px;
+.glass-box h1 {
+  font-size: 48px;
+  margin-bottom: 20px;
+  background: linear-gradient(90deg, #00c6ff, #0072ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
-.landing-glass p {
-  font-size: 1.2rem;
+.glass-box p {
+  font-size: 18px;
   margin-bottom: 30px;
 }
 
 .landing-buttons button {
-  background: white;
-  color: #4b4b4b;
+  padding: 12px 28px;
+  margin: 0 10px;
   border: none;
-  padding: 12px 24px;
-  margin: 10px;
-  border-radius: 8px;
-  font-weight: bold;
+  border-radius: 30px;
+  font-size: 16px;
   cursor: pointer;
-  transition: 0.3s ease;
+  transition: all 0.3s ease;
+}
+
+.landing-buttons button:first-child {
+  background: #00c6ff;
+  color: white;
+}
+
+.landing-buttons .secondary {
+  background: transparent;
+  border: 1px solid white;
+  color: white;
 }
 
 .landing-buttons button:hover {
-  background: #f0f0f0;
+  transform: scale(1.05);
 }
 
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
