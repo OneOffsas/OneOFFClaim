@@ -7,17 +7,12 @@ const Landing = () => {
 
   return (
     <div className="landing-container">
-      <div className="glass-box">
-        <h1 className="main-title">ClaimOneOff</h1>
-        <p className="subtitle">Révolutionnez la gestion de vos litiges logistiques e-commerce.</p>
-        <p className="description">
-          Notre solution vous permet d'automatiser, suivre et résoudre efficacement vos réclamations transporteurs,
-          tout en vous offrant une interface intuitive et des statistiques puissantes.
-        </p>
-        <div className="button-group">
-          <button onClick={() => navigate('/register')} className="btn">S'inscrire</button>
-          <button onClick={() => navigate('/login')} className="btn btn-secondary">Se connecter</button>
-          <button onClick={() => navigate('/forgot-password')} className="btn btn-link">Mot de passe oublié</button>
+      <div className="glass-card">
+        <h1>ClaimOneOff</h1>
+        <p>Optimisez la gestion de vos litiges logistiques e-commerce.<br />Gagnez du temps, automatisez les réclamations, analysez vos erreurs et améliorez votre satisfaction client.</p>
+        <div className="landing-buttons">
+          <button onClick={() => navigate('/register')}>S’inscrire</button>
+          <button onClick={() => navigate('/login')}>Se connecter</button>
         </div>
       </div>
     </div>
