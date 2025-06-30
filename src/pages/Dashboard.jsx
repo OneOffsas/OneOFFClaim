@@ -1,47 +1,48 @@
-// src/pages/dashboard.jsx
-import React, { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { auth } from "../firebase";
-import { signOut } from "firebase/auth";
-import { useAuth } from "../lib/AuthContext";
-import Menu from "../components/Menu";
+import React from 'react';
+import './dashboard.css';
+import { useNavigate } from 'react-router-dom';
 
-const Dashboard = () => {
+function Dashboard() {
   const navigate = useNavigate();
-  const { user, loading } = useAuth();
 
-  useEffect(() => {
-    if (!loading && !user) {
-      navigate("/login");
-    }
-  }, [loading, user, navigate]);
-
-  const handleLogout = async () => {
-    await signOut(auth);
-    navigate("/login");
+  const handleLogout = () => {
+    localStorage.removeItem('user');
+    navigate('/login');
   };
 
-  if (loading) {
-    return <div className="text-center mt-10">Chargement...</div>;
-  }
+  const user = JSON.parse(localStorage.getItem('user'));
 
   return (
-    <div className="min-h-screen bg-gray-100 flex">
-      <Menu />
-      <main className="flex-1 p-8">
-        <h1 className="text-2xl font-bold mb-4">Dashboard</h1>
-        <p>Bienvenue, {user?.email}</p>
+    <div className="dashboard-container">
+      <header className="dashboard-header">
+        <h1>ClaimOneOff</h1>
+        <nav>
+          <span>Bienvenue {user?.prenom || 'Utilisateur'}</span>
+          <button onClick={handleLogout}>Déconnexion</button>
+        </nav>
+      </header>
 
-        <button
-          onClick={handleLogout}
-          className="mt-4 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded"
-        >
-          Déconnexion
-        </button>
+      <main className="dashboard-main">
+        <h2>Tableau de bord</h2>
+        <div className="dashboard-cards">
+          <div className="card">
+            <h3>Tickets Ouverts</h3>
+            <p>12</p>
+          </div>
+          <div className="card">
+            <h3>Résolus ce mois</h3>
+            <p>37</p>
+          </div>
+          <div className="card">
+            <h3>Temps moyen de résolution</h3>
+            <p>5h 13min</p>
+          </div>
+        </div>
       </main>
     </div>
   );
-};
+}
 
 export default Dashboard;
+
 
