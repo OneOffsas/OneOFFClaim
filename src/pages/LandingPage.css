@@ -1,84 +1,52 @@
 .landing-container {
   height: 100vh;
-  width: 100%;
-  background: linear-gradient(to right, #1f0036, #3c0072);
-  background-image: url('https://images.unsplash.com/photo-1556740738-b6a63e27c4df?auto=format&fit=crop&w=1950&q=80');
-  background-size: cover;
-  background-position: center;
-  position: relative;
+  background: linear-gradient(135deg, #1f1c2c, #928DAB);
   display: flex;
+  justify-content: center;
   align-items: center;
-  justify-content: center;
-  overflow: hidden;
+  font-family: 'Segoe UI', sans-serif;
 }
 
-.landing-overlay {
-  text-align: center;
-  background: rgba(0, 0, 0, 0.75);
-  padding: 60px;
+.glass-card {
+  background: rgba(255, 255, 255, 0.08);
   border-radius: 20px;
+  padding: 40px;
+  width: 90%;
+  max-width: 500px;
+  text-align: center;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   color: white;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-  animation: fadeIn 1.5s ease;
+  animation: fadeIn 1.2s ease;
 }
 
-.landing-title {
-  font-size: 3.5rem;
-  margin-bottom: 20px;
-  color: #ffffff;
-  font-weight: 700;
-  letter-spacing: 2px;
+.glass-card h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
 }
 
-.landing-subtitle {
-  font-size: 1.3rem;
-  margin-bottom: 40px;
-  color: #dddddd;
-  line-height: 1.8;
+.glass-card p {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
 }
 
-.landing-buttons {
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-}
-
-.btn-login,
-.btn-register {
-  padding: 12px 30px;
-  font-size: 1rem;
+.buttons button {
+  background: #6C63FF;
   border: none;
-  border-radius: 30px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-weight: 600;
-}
-
-.btn-login {
-  background-color: #6a00f4;
+  border-radius: 10px;
+  padding: 10px 25px;
+  margin: 0 10px;
   color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s;
 }
 
-.btn-login:hover {
-  background-color: #5800c4;
-}
-
-.btn-register {
-  background-color: #ffffff;
-  color: #6a00f4;
-}
-
-.btn-register:hover {
-  background-color: #f0f0f0;
+.buttons button:hover {
+  background: #574fd6;
 }
 
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0px);
-  }
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
 }
