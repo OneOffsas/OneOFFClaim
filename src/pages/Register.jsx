@@ -1,52 +1,109 @@
-// src/pages/Register.jsx
 import React, { useState } from "react";
-import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebaseConfig";
-import { useNavigate } from "react-router-dom";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import "./Register.css";
 
-function Register() {
-  const navigate = useNavigate();
-  const [email, setEmail] = useState("");
-  const [motDePasse, setMotDePasse] = useState("");
+const Register = () => {
+  const [form, setForm] = useState({
+    nom: "",
+    prenom: "",
+    societe: "",
+    email: "",
+    password: "",
+  });
   const [message, setMessage] = useState("");
 
-  const handleRegister = async (e) => {
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    const { nom, prenom, societe, email, password } = form;
+
+    if (!nom || !prenom || !societe || !email || !password) {
+      setMessage("❌ Tous les champs sont obligatoires.");
+      return;
+    }
+
     try {
-      await createUserWithEmailAndPassword(auth, email, motDePasse);
+      await createUserWithEmailAndPassword(auth, email, password);
+
+      // Ajout dans Google Sheets
+      await fetch("https://script.google.com/macros/s/TON_URL_PUBLIC/exec", {
+        method: "POST",
+        body: JSON.stringify({
+          Email: email,
+          Nom: nom,
+          Prenom: prenom,
+          Societe: societe,
+          Role: "Client",
+          Actif: "Oui",
+          Date_Inscription: new Date().toLocaleString("fr-FR"),
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
       setMessage("✅ Inscription réussie !");
-      setTimeout(() => navigate("/dashboard"), 1500);
+      setForm({ nom: "", prenom: "", societe: "", email: "", password: "" });
     } catch (error) {
-      setMessage("❌ Erreur : " + error.message);
+      setMessage(`❌ Erreur : ${error.message}`);
     }
   };
 
   return (
     <div className="register-container">
-      <form className="register-form" onSubmit={handleRegister}>
-        <h2>Créer un compte</h2>
+      <form className="register-form" onSubmit={handleSubmit}>
+        <h2>Inscription</h2>
+        <input
+          type="text"
+          name="nom"
+          placeholder="Nom"
+          value={form.nom}
+          onChange={handleChange}
+          required
+        />
+        <input
+          type="text"
+          name="prenom"
+          placeholder="Prénom"
+          value={form.prenom}
+          onChange={handleChange}
+          required
+        />
+        <input
+          type="text"
+          name="societe"
+          placeholder="Société"
+          value={form.societe}
+          onChange={handleChange}
+          required
+        />
         <input
           type="email"
-          placeholder="Adresse email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          name="email"
+          placeholder="Email"
+          value={form.email}
+          onChange={handleChange}
           required
         />
         <input
           type="password"
+          name="password"
           placeholder="Mot de passe"
-          value={motDePasse}
-          onChange={(e) => setMotDePasse(e.target.value)}
+          value={form.password}
+          onChange={handleChange}
           required
         />
-        <button type="submit">S'inscrire</button>
-        <p className="message">{message}</p>
-        <p className="back" onClick={() => navigate("/")}>← Retour</p>
+        <button type="submit">Créer un compte</button>
+        {message && <p className="message">{message}</p>}
       </form>
     </div>
   );
-}
+};
 
 export default Register;
+
 
