@@ -7,18 +7,14 @@ function LandingPage() {
 
   return (
     <div className="landing-container">
-      <div className="glass-card">
-        <h1 className="title">ClaimOneOff</h1>
-        <p className="subtitle">Optimisez la gestion de vos litiges logistiques e-commerce</p>
-        <p className="description">
-          Notre solution SaaS vous permet de suivre, analyser et résoudre vos litiges transport et erreurs de préparation avec une interface intuitive et des KPIs puissants.
-        </p>
-        <div className="btn-group">
-          <button onClick={() => navigate('/register')}>Créer un compte</button>
-          <button onClick={() => navigate('/login')} className="outline">Se connecter</button>
+      <div className="overlay">
+        <h1 className="landing-title">ClaimOneOff</h1>
+        <p className="landing-subtitle">Optimisez la gestion de vos litiges logistiques e-commerce.</p>
+        <div className="landing-buttons">
+          <button onClick={() => navigate('/login')}>Se connecter</button>
+          <button onClick={() => navigate('/register')}>S’inscrire</button>
         </div>
       </div>
-      <div className="background-animation"></div>
     </div>
   );
 }
