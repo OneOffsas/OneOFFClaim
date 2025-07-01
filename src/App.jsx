@@ -21,7 +21,7 @@ function App() {
       setUser(currentUser);
       if (currentUser) {
         try {
-          const response = await fetch("https://script.google.com/macros/s/TON_URL_PUBLIC/exec?email=" + currentUser.email);
+          const response = await fetch("https://script.google.com/macros/s/AKfycbzm3MrvKRQy75IMnHosYHC1zHvIIxq-kf53ZwV9J2YatrP6C90MCO7JJHjSFxOnQdle/exec" + currentUser.email);
           const data = await response.json();
           if (data.success) {
             setRole(data.role);
