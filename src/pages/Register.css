@@ -1,64 +1,75 @@
 .register-container {
+  min-height: 100vh;
+  background: linear-gradient(to right, #1f0036, #3c0072);
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
-  background: linear-gradient(to bottom right, #0f0c29, #302b63, #24243e);
 }
 
 .register-form {
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(20px);
-  padding: 2rem;
-  border-radius: 16px;
-  box-shadow: 0 0 30px rgba(0, 0, 0, 0.4);
-  width: 100%;
+  background: white;
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.25);
+  width: 90%;
   max-width: 400px;
-  color: white;
-  display: flex;
-  flex-direction: column;
+  text-align: center;
+  animation: fadeIn 1.2s ease;
 }
 
 .register-form h2 {
-  text-align: center;
-  margin-bottom: 1rem;
-  font-size: 24px;
+  margin-bottom: 20px;
+  color: #6a00f4;
 }
 
 .register-form input {
-  padding: 12px;
-  margin: 0.5rem 0;
-  border: none;
+  width: 100%;
+  margin-bottom: 15px;
+  padding: 12px 15px;
   border-radius: 8px;
-  background: rgba(255, 255, 255, 0.2);
-  color: white;
-  font-size: 14px;
-}
-
-.register-form input::placeholder {
-  color: #ccc;
+  border: 1px solid #ccc;
+  font-size: 1rem;
 }
 
 .register-form button {
-  margin-top: 1rem;
+  width: 100%;
   padding: 12px;
+  background: #6a00f4;
+  color: white;
+  font-size: 1rem;
   border: none;
   border-radius: 8px;
-  background-color: #6a11cb;
-  background-image: linear-gradient(315deg, #6a11cb 0%, #2575fc 74%);
-  color: white;
-  font-weight: bold;
   cursor: pointer;
+  font-weight: 600;
   transition: background 0.3s ease;
 }
 
 .register-form button:hover {
-  background-image: linear-gradient(315deg, #2575fc 0%, #6a11cb 74%);
+  background: #4b00b8;
 }
 
-.message {
-  margin-top: 1rem;
-  text-align: center;
+.register-message {
+  margin-top: 10px;
+  color: #6a00f4;
   font-weight: bold;
+}
+
+.link-login {
+  margin-top: 20px;
+  color: #6a00f4;
+  cursor: pointer;
+  text-decoration: underline;
+  font-size: 0.95rem;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(25px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
