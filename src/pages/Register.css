@@ -1,75 +1,58 @@
 .register-container {
-  min-height: 100vh;
-  background: linear-gradient(to right, #1f0036, #3c0072);
+  height: 100vh;
+  background: linear-gradient(120deg, #6c63ff, #3b3b98);
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
+  font-family: 'Segoe UI', sans-serif;
 }
 
 .register-form {
-  background: white;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
   padding: 40px;
-  border-radius: 20px;
-  box-shadow: 0 0 30px rgba(0, 0, 0, 0.25);
-  width: 90%;
-  max-width: 400px;
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.3);
+  width: 400px;
+  max-width: 90%;
   text-align: center;
-  animation: fadeIn 1.2s ease;
 }
 
 .register-form h2 {
+  color: white;
   margin-bottom: 20px;
-  color: #6a00f4;
+  font-size: 2rem;
 }
 
 .register-form input {
   width: 100%;
-  margin-bottom: 15px;
-  padding: 12px 15px;
+  padding: 12px;
+  margin: 10px 0;
   border-radius: 8px;
-  border: 1px solid #ccc;
+  border: none;
+  outline: none;
   font-size: 1rem;
 }
 
 .register-form button {
   width: 100%;
-  padding: 12px;
-  background: #6a00f4;
+  padding: 14px;
+  background-color: #574b90;
   color: white;
-  font-size: 1rem;
   border: none;
-  border-radius: 8px;
+  border-radius: 10px;
+  font-size: 1.1rem;
   cursor: pointer;
-  font-weight: 600;
-  transition: background 0.3s ease;
+  transition: 0.3s;
 }
 
 .register-form button:hover {
-  background: #4b00b8;
+  background-color: #2f2fa2;
 }
 
-.register-message {
-  margin-top: 10px;
-  color: #6a00f4;
-  font-weight: bold;
-}
-
-.link-login {
-  margin-top: 20px;
-  color: #6a00f4;
-  cursor: pointer;
-  text-decoration: underline;
-  font-size: 0.95rem;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(25px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.message {
+  margin-top: 15px;
+  color: #fff;
+  font-weight: 500;
 }
 
