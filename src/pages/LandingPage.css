@@ -1,89 +1,88 @@
 .landing-container {
   height: 100vh;
-  width: 100vw;
-  background: linear-gradient(135deg, #1f1c2c, #928dab);
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+  background-size: cover;
+  background-position: center;
   display: flex;
   align-items: center;
   justify-content: center;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   position: relative;
-  overflow: hidden;
 }
 
-.background-animation {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background: radial-gradient(circle at 20% 20%, rgba(255,255,255,0.1), transparent 40%),
-              radial-gradient(circle at 80% 80%, rgba(255,255,255,0.05), transparent 50%);
-  animation: float 10s ease-in-out infinite;
-  z-index: 1;
-}
-
-@keyframes float {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.05); }
-  100% { transform: scale(1); }
-}
-
-.glass-card {
-  z-index: 2;
+.overlay {
   background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
   border-radius: 20px;
-  padding: 60px 40px;
+  padding: 60px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 0 60px rgba(0, 0, 0, 0.5);
   text-align: center;
+  color: white;
+  animation: fadeInUp 1.2s ease-out;
   max-width: 700px;
   width: 90%;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.2);
-  color: #fff;
 }
 
-.title {
-  font-size: 3.2rem;
+.landing-title {
+  font-size: 3.5rem;
   font-weight: bold;
   margin-bottom: 20px;
+  animation: fadeInDown 1s ease-in;
 }
 
-.subtitle {
-  font-size: 1.4rem;
-  margin-bottom: 20px;
-  font-weight: 500;
-  color: #ddd;
-}
-
-.description {
-  font-size: 1.1rem;
+.landing-subtitle {
+  font-size: 1.5rem;
   margin-bottom: 40px;
-  line-height: 1.6;
-  color: #eee;
+  color: #e0e0e0;
+  animation: fadeIn 1.5s ease-in-out;
 }
 
-.btn-group button {
-  margin: 0 10px;
-  padding: 12px 28px;
+.landing-buttons button {
+  background: #6c63ff;
   border: none;
-  border-radius: 30px;
+  padding: 15px 30px;
   font-size: 1rem;
-  cursor: pointer;
-  transition: all 0.3s ease-in-out;
-  background-color: #ffffff;
-  color: #1f1c2c;
-  font-weight: 600;
-}
-
-.btn-group button:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-}
-
-.btn-group .outline {
-  background-color: transparent;
+  margin: 0 10px;
+  border-radius: 30px;
   color: white;
-  border: 2px solid #ffffff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 24px rgba(108, 99, 255, 0.3);
 }
 
-.btn-group .outline:hover {
-  background-color: rgba(255, 255, 255, 0.2);
+.landing-buttons button:hover {
+  background: #574b90;
+  transform: translateY(-2px);
+}
+
+@keyframes fadeInUp {
+  from {
+    transform: translateY(40px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInDown {
+  from {
+    transform: translateY(-40px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
