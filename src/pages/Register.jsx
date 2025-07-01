@@ -1,53 +1,51 @@
-import React, { useState } from "react";
-import { auth } from "../firebaseConfig";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import "./Register.css";
+import React, { useState } from 'react';
+import './Register.css';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../firebaseConfig';
 
 const Register = () => {
-  const [form, setForm] = useState({
-    nom: "",
-    prenom: "",
-    societe: "",
-    email: "",
-    password: "",
+  const [formData, setFormData] = useState({
+    nom: '',
+    prenom: '',
+    societe: '',
+    email: '',
+    password: '',
   });
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState('');
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { nom, prenom, societe, email, password } = form;
+    const { nom, prenom, societe, email, password } = formData;
 
     if (!nom || !prenom || !societe || !email || !password) {
-      setMessage("❌ Tous les champs sont obligatoires.");
+      setMessage('❌ Tous les champs sont obligatoires.');
       return;
     }
 
     try {
       await createUserWithEmailAndPassword(auth, email, password);
 
-      // Ajout dans Google Sheets
-      await fetch("https://script.google.com/macros/s/AKfycbzm3MrvKRQy75IMnHosYHC1zHvIIxq-kf53ZwV9J2YatrP6C90MCO7JJHjSFxOnQdle/exec", {
-        method: "POST",
+      await fetch('https://script.google.com/macros/s/AKfycbzm3MrvKRQy75IMnHosYHC1zHvIIxq-kf53ZwV9J2YatrP6C90MCO7JJHjSFxOnQdle/exec', {
+        method: 'POST',
         body: JSON.stringify({
-          Email: email,
           Nom: nom,
           Prenom: prenom,
           Societe: societe,
-          Role: "Client",
-          Actif: "Oui",
-          Date_Inscription: new Date().toLocaleString("fr-FR"),
+          Email: email,
+          Role: 'Client',
+          Actif: 'Oui',
+          Date_Inscription: new Date().toLocaleDateString('fr-FR'),
         }),
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
       });
 
-      setMessage("✅ Inscription réussie !");
-      setForm({ nom: "", prenom: "", societe: "", email: "", password: "" });
+      setMessage('✅ Inscription réussie !');
     } catch (error) {
       setMessage(`❌ Erreur : ${error.message}`);
     }
@@ -56,48 +54,13 @@ const Register = () => {
   return (
     <div className="register-container">
       <form className="register-form" onSubmit={handleSubmit}>
-        <h2>Inscription</h2>
-        <input
-          type="text"
-          name="nom"
-          placeholder="Nom"
-          value={form.nom}
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="text"
-          name="prenom"
-          placeholder="Prénom"
-          value={form.prenom}
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="text"
-          name="societe"
-          placeholder="Société"
-          value={form.societe}
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          value={form.email}
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="password"
-          name="password"
-          placeholder="Mot de passe"
-          value={form.password}
-          onChange={handleChange}
-          required
-        />
-        <button type="submit">Créer un compte</button>
+        <h2>Créer un compte</h2>
+        <input type="text" name="nom" placeholder="Nom" onChange={handleChange} />
+        <input type="text" name="prenom" placeholder="Prénom" onChange={handleChange} />
+        <input type="text" name="societe" placeholder="Société" onChange={handleChange} />
+        <input type="email" name="email" placeholder="Email" onChange={handleChange} />
+        <input type="password" name="password" placeholder="Mot de passe" onChange={handleChange} />
+        <button type="submit">S'inscrire</button>
         {message && <p className="message">{message}</p>}
       </form>
     </div>
