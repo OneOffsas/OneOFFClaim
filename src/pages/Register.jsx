@@ -30,7 +30,7 @@ const Register = () => {
       await createUserWithEmailAndPassword(auth, email, password);
 
       // Ajout dans Google Sheets
-      await fetch("https://script.google.com/macros/s/TON_URL_PUBLIC/exec", {
+      await fetch("https://script.google.com/macros/s/AKfycbzm3MrvKRQy75IMnHosYHC1zHvIIxq-kf53ZwV9J2YatrP6C90MCO7JJHjSFxOnQdle/exec", {
         method: "POST",
         body: JSON.stringify({
           Email: email,
